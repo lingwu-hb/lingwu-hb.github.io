@@ -7,7 +7,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
 <meta property="article:published_time" content="2024-10-22T07:19:39.000Z">
-<meta property="article:modified_time" content="2024-10-22T12:27:10.439Z">
+<meta property="article:modified_time" content="2024-10-22T12:33:37.552Z">
 <meta property="article:author" content="Bo Han">
 <meta property="article:tag" content="cache prefetcher">
 <meta name="twitter:card" content="summary">
@@ -56,7 +56,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2024-10-22 20:27:10'
+  postUpdate: '2024-10-22 20:33:37'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -153,7 +153,7 @@
         }
       }
       detectApple()
-    })(window)</script><meta name="generator" content="Hexo 7.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">About cache prefetcher</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-10-22T07:19:39.000Z" title="Created 2024-10-22 15:19:39">2024-10-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-10-22T12:27:10.439Z" title="Updated 2024-10-22 20:27:10">2024-10-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/paper/">paper</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="About cache prefetcher"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+    })(window)</script><meta name="generator" content="Hexo 7.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">About cache prefetcher</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-10-22T07:19:39.000Z" title="Created 2024-10-22 15:19:39">2024-10-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-10-22T12:33:37.552Z" title="Updated 2024-10-22 20:33:37">2024-10-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/paper/">paper</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="About cache prefetcher"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
 <p>这篇文章主要记录调研的cache prefetch部分有价值的论文，并给出一些总结</p>
 </blockquote>
 <h1 id="Baleen"><a href="#Baleen" class="headerlink" title="Baleen"></a>Baleen</h1><h3 id="核心内容"><a href="#核心内容" class="headerlink" title="核心内容"></a>核心内容</h3><ol>
@@ -182,7 +182,7 @@
 <p>这种预取相当于识别了一种访存模式，一个 episodes 对应于一种访存模式，当下次在遇到此类访存模式时，系统就知道如何进行预取后续的 segments 到 flash cache 中。</p>
 <h3 id="Baleen-具体实现方案"><a href="#Baleen-具体实现方案" class="headerlink" title="Baleen 具体实现方案"></a>Baleen 具体实现方案</h3><p>总共使用了9个特征信息，包括离线的元数据信息和在线的访问情况</p>
 <p>使用GBM来做二分类问题，作为准入策略。</p>
-<p><img src="D:\lingwu\uDeskCopy\graduate\img\Baleen架构图.jpg" alt="Baleen架构图"></p>
+<p><img src="https://s2.loli.net/2024/10/22/O4TBP7CzHNbjwuG.jpg" alt="Baleen架构图"></p>
 <p>​                                                                              Fig6：Architecture</p>
 <ol>
 <li>访问记录被分为若干 Episodes，然后送入到 Admission Policy 中进行训练，从而训练出一个二分类模型。</li>
@@ -250,14 +250,14 @@
 <li><p>reward：分为四种奖励</p>
 </li>
 </ul>
-<p><img src="D:\lingwu\uDeskCopy\graduate\img\CHROME总体架构图.png" alt="CHROME总体架构图"></p>
+<p><img src="https://s2.loli.net/2024/10/22/BX1DEWMAQN84z3k.png" alt="CHROME总体架构图"></p>
 <p>​																						CHROME架构图</p>
 <p>表中内容细节</p>
 <p>EQ：Each EQ entry records five pieces of information: the state vector, the action executed by CHROME, whether the action was triggered by a hit or a miss, the memory address of the requested cache block, and the assigned reward.</p>
 <p>Q2：什么时候给 EQ 中的项赋 award 值呢？是在下一个请求到来的时候吗？</p>
 <p>For each new LLC request, if the request address matches the address stored in an EQ entry (indicating that CHROME has previously executed an action for this address and this address is now being requested again within a temporal window</p>
 <p>This reward is determined based on whether the corresponding action results in a cache hit or a miss, and whether the LLC request is triggered by demand or prefetch</p>
-<p><img src="D:\lingwu\uDeskCopy\graduate\img\CHROME伪代码.png" alt="CHROME伪代码"></p>
+<p><img src="https://s2.loli.net/2024/10/22/Jo3wC4pKjkzNXWi.png" alt="CHROME伪代码"></p>
 <p>​																							CHROME伪代码</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
 <thead>
