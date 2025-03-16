@@ -813,14 +813,14 @@ hexo-renderer-marked@^6.0.0:
 
 hexo-renderer-pug@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmmirror.com/hexo-renderer-pug/-/hexo-renderer-pug-3.0.0.tgz"
+  resolved "https://registry.npmjs.org/hexo-renderer-pug/-/hexo-renderer-pug-3.0.0.tgz"
   integrity sha512-PmbLx6VkNv+mPLOe97OC4F8iTzTuj665dSYN7bZKArd4M/q7gb2tNs29VGuAOC50i9tvWY2f+tPQimf0GZ9Hyw==
   dependencies:
     pug "^3.0.2"
 
 hexo-renderer-stylus@^3.0.1:
   version "3.0.1"
-  resolved "https://registry.npmmirror.com/hexo-renderer-stylus/-/hexo-renderer-stylus-3.0.1.tgz"
+  resolved "https://registry.npmjs.org/hexo-renderer-stylus/-/hexo-renderer-stylus-3.0.1.tgz"
   integrity sha512-cFm8ZwShBBeFcQwOXc8EK7lIZnSYVD6OJykdL4GBw99hxc4eD5Hlsi32nRzE8sgKv00jhX1s9Da3GVVFMPAVQg==
   dependencies:
     nib "^1.2.0"
