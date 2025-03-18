@@ -5,6 +5,7 @@ categories:
 - data storage
 tags:
 - ceph
+- 实习项目
 ---
 
 
