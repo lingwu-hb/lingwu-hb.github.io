@@ -40,7 +40,15 @@ git clone -b source git@github.com:lingwu-hb/lingwu-hb.github.io.git
 
 ## 2. 编辑博客
 
-然后，在本地编辑博客内容，编辑完成后，将修改推送到 Github 仓库 source 分支。
+然后，在本地编辑博客内容
+
+```bash
+hexo new "New Blog Name"
+```
+
+然后用 markdown 打开进行编辑。
+
+编辑完成后，将修改推送到 Github 仓库 source 分支。
 
 ```bash
 git commit -a -m "update blog"
@@ -54,4 +62,6 @@ git push origin source:source
 ```bash
 hexo g # 生成静态文件
 hexo d
+
+hexo s # 本地预览
 ```
