@@ -52,10 +52,10 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.png
+favicon: /img/yaojie.jpg
 
 avatar:
-  img: /img/butterfly-icon.png
+  img: /img/yaojie.jpg
   effect: false
 
 # Disable all banner images
@@ -799,15 +799,15 @@ beautify:
 # Global font settings
 # Don't modify the following settings unless you know how they work
 font:
-  global_font_size:
+  global_font_size: 14px  # 可以调整全局字体大小
   code_font_size:
-  font_family:
+  font_family: '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "Source Han Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif'  # 设置全局字体
   code_font_family:
 
 # Font settings for the site title and site subtitle
 blog_title_font:
-  font_link:
-  font_family:
+  font_link: https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap  # 可以引入 Google Fonts
+  font_family: 'Noto Serif SC, serif'
 
 # The setting of divider icon
 hr_icon:
