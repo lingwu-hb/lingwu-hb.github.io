@@ -134,6 +134,21 @@ public:
 
 本质上就是树的后序遍历步骤，首先**处理递归边界**，然后考虑**处理左右节点**，最后考虑**退栈的维护工作**，整体分为三步走流程！
 
+### c++ 自定义优先队列
+
+```c++
+struct cmp {
+    bool operator()(const Node& a, const Node& b) {
+        return a.priority > b.priority; // 按优先级升序排列
+    }
+}
+priority_queue pq(Node, vector<Node>, cmp); // 固定用这种格式进行操作即可
+```
+
+
+
+
+
 
 
 ## 算法类 tip
