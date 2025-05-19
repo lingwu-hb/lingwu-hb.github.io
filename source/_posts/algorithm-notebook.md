@@ -180,7 +180,7 @@ auto it = std::lower_bound(vec.begin(), vec.end(), target);
 * 功能：检查有序序列中是否存在某个值。
 * 返回值：返回一个布尔值，表示是否找到目标值。
 
-### 回溯算法
+### 回溯算法模板
 
 示例题型： [leetcode17 电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/?envType=study-plan-v2&envId=top-100-liked)
 
@@ -233,3 +233,38 @@ public:
 > 2. 可选择的元素是否支持重复选择，递归进入回溯函数的时候，start 是否需要 +1
 >
 > 3. 剪枝逻辑问题，一般此类题所有的变式都难在剪枝的逻辑处理
+
+### 通用迭代法模拟递归
+
+[N叉树的前序遍历](https://leetcode.cn/problems/n-ary-tree-preorder-traversal/description/)
+
+```c++
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> ans;
+        stack<pair<int, Node*>> stk;
+        stk.push({0, root});
+        while (!stk.empty()) {
+            auto [loc, node] = stk.top();
+            stk.pop();
+            if (!node) continue;
+            // loc 模拟栈帧状态，为 0 时表示访问当前节点，为 1 时表示处理当前节点的子节点
+            if (loc == 0) {
+                ans.push_back(node->val);
+                stk.push({1, node});
+            } elseif (loc == 1) {
+                // 这里采用逆序入栈，利用栈的先进后出特性，保证从左到右进行处理！
+                for (auto it = node->children.rbegin(); it != node->children.rend(); it++) {
+                    stk.push({0, *it});
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+> 之前没有见到过的使用状态变量迭代法模拟递归的方法，记录一下。
+>
+> 核心思路为：使用状态变量模拟递归的不同状态，同时对子节点进行逆序入栈，从而保障左子树 -> 右子树的顺序！
