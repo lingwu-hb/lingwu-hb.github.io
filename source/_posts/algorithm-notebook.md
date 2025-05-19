@@ -179,3 +179,57 @@ auto it = std::lower_bound(vec.begin(), vec.end(), target);
 
 * 功能：检查有序序列中是否存在某个值。
 * 返回值：返回一个布尔值，表示是否找到目标值。
+
+### 回溯算法
+
+示例题型： [leetcode17 电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/?envType=study-plan-v2&envId=top-100-liked)
+
+```c++
+#include <vector>
+#include <string>
+#include <unordered_map>
+class Solution {
+    // 每个数字到字母的映射
+    std::unordered_map<char, std::string> mapping = {
+        {'2', "abc"}, {'3', "def"}, {'4', "ghi"}, {'5', "jkl"},
+        {'6', "mno"}, {'7', "pqrs"}, {'8', "tuv"}, {'9', "wxyz"}
+    };
+    std::vector<std::string> res;
+    std::string sb;
+public:
+    std::vector<std::string> letterCombinations(std::string digits) {
+        if (digits.empty()) {
+            return res;
+        }
+        // 从 digits[0] 开始进行回溯
+        backtrack(digits, 0);
+        return res;
+    }
+    // 回溯算法主函数
+    void backtrack(const std::string& digits, int start) {
+        if (sb.size() == digits.size()) {
+            // 到达回溯树底部
+            res.push_back(sb);
+            return;
+        }
+        // 回溯算法框架
+        char digit = digits[start];
+        for (char c : mapping[digit]) {
+            // 做选择
+            sb.push_back(c);
+            // 递归下一层回溯树
+            backtrack(digits, start + 1);
+            // 撤销选择
+            sb.pop_back();
+        }
+    }
+};
+```
+
+> 这类问题涉及三个关键点
+>
+> 1. 可选择的元素是否重复，要考虑使用 used 数组进行去重操作
+>
+> 2. 可选择的元素是否支持重复选择，递归进入回溯函数的时候，start 是否需要 +1
+>
+> 3. 剪枝逻辑问题，一般此类题所有的变式都难在剪枝的逻辑处理
