@@ -2,8 +2,8 @@
 title: Decision Tree Addmission Policy
 date: 2025-05-16 16:06:20
 categories:
-- AI
-- data storage
+- [AI]
+- [data storage]
 tags:
 - 决策树准入
 

@@ -2,8 +2,8 @@
 title: About cache prefetcher
 date: 2024-10-22 15:19:39
 categories:
-- paper
-- data storage
+- [paper]
+- [data storage]
 tags:
 - cache prefetcher
 ---

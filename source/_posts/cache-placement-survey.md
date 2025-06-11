@@ -2,8 +2,8 @@
 title: cache placement survey
 date: 2024-08-04 15:16:58
 categories:
-- paper
-- data storage
+- [paper]
+- [data storage]
 tags:
 - cache placement survey
 ---
