@@ -7,8 +7,9 @@ tags:
 - useful tools
 ---
 
+# 常用流程
 
-# 配置 zsh && oh-my-zsh
+## 配置 zsh && oh-my-zsh
 
 1. ZSH（Z-Shell）是一种功能强大的 Unix shell，提供了许多增强功能，如高级脚本能力、自动补全和主题支持。
 
@@ -35,4 +36,39 @@ plugins=(git
         sudo
         last-working-dir
         )
+```
+
+# 常见问题
+
+## Include 报错
+
+`CTRL + SHIFT + P` 打开 vscode 终端，搜索 JSON，选中 `C/C++: Edit Configurations(JSON)`
+然后在 "includePath" 中增加需要 include 的路径（不同的库文件，路径不相同），对于 glib.h ，可以参考以下格式：
+
+```shell
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/c++/9",
+                "/usr/include/x86_64-linux-gnu/c++/9",
+                "/usr/include/c++/9/backward",
+                "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+                "/usr/local/include",
+                "/usr/include/x86_64-linux-gnu",
+                "/usr/include",
+                "/usr/include/glib-2.0",
+                "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++98",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
 ```
