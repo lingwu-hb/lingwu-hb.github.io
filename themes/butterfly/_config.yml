@@ -449,6 +449,8 @@ math:
   hide_scrollbar: false
 
   mathjax:
+    enable: true
+    everty_page: true
     # Enable the contextual menu
     enableMenu: true
     # Choose: all / ams / none, This controls whether equations are numbered and how
@@ -456,6 +458,7 @@ math:
 
   katex:
     # Enable the copy KaTeX formula
+    enable: false
     copy_tex: false
 
 # --------------------------------------
