@@ -37,9 +37,8 @@ $$
 ### Q、K、V 向量的生成
 
 - Q（Query）与 K（Key）向量：
-  $$
-  Q = W_kE \\ K = W_kE
-  $$
+  $$ Q = W_kE $$
+  $$ K = W_kE $$
 
   - 其中，$E$ 是输入的 Embedding 向量，维度为 $d_{emb}$（如 512）。
   - $W_q$ 和 $W_k$ 是可学习的权重矩阵，维度为 $d_k \times d_{emb}$，通常 $d_k < d_{emb}$，从而将 Embedding 映射到较低维度的空间。
