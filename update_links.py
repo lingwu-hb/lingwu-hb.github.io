@@ -7,7 +7,14 @@ from datetime import datetime
 # 配置
 posts_dir = 'source/_posts'
 links_base_dir = 'source/_posts_organized'  # 存放链接的基础目录
-organize_by = 'both'  # 'date' 或 'categories' 或 'both'
+organize_by = 'categories'  # 'date' 或 'categories' 或 'both'
+
+def normalize_category(category):
+    """处理类别名称，移除中括号"""
+    if isinstance(category, str):
+        # 移除 [xxx] 格式中的括号
+        return re.sub(r'^\[(.*)\]$', r'\1', category.strip())
+    return category
 
 def create_symlinks():
     print("开始更新文章符号链接...")
@@ -68,7 +75,19 @@ def create_symlinks():
             if not isinstance(categories, list):
                 categories = [categories] if categories else []
             
-            for category in categories:
+            # 处理嵌套列表的情况，如 [['AI'], ['data storage']]
+            processed_categories = []
+            for cat in categories:
+                if isinstance(cat, list):
+                    # 如果是嵌套列表，提取每个子元素
+                    for subcat in cat:
+                        if subcat:
+                            processed_categories.append(normalize_category(subcat))
+                else:
+                    if cat:
+                        processed_categories.append(normalize_category(cat))
+            
+            for category in processed_categories:
                 if not category:
                     continue
                     
