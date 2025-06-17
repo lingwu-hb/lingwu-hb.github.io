@@ -49,23 +49,17 @@ hexo new "New Blog Name"
 
 然后用 markdown 打开进行编辑。
 
-编辑完成后，将修改推送到 Github 仓库 source 分支：
-
-```bash
-git commit -a -m "update blog"
-git push origin source:source
-```
-
 ### 3. 部署博客
 
 #### 方式一：使用部署脚本（推荐）
 
 我们提供了一个 Windows 批处理脚本 `deploy.bat` 来自动化部署流程。该脚本会依次执行以下操作：
-1. 添加所有更改到 git
-2. 提交更改（使用提供的提交信息）
-3. 推送到 source 分支
-4. 生成静态文件
-5. 部署到 GitHub Pages
+1. 执行 update_links 脚本，生成副本文件夹
+2. 添加所有更改到 git
+3. 提交更改（使用提供的提交信息）
+4. 推送到 source 分支
+5. 生成静态文件
+6. 部署到 GitHub Pages
 
 使用方法：
 ```bash
@@ -84,8 +78,11 @@ deploy.bat "更新博客：添加新文章"
 如果你想手动执行部署步骤，可以使用以下命令：
 
 ```bash
+python update_links.py
+git add .
+git commit -m "info"
+git push origin source:source
 hexo g # 生成静态文件
 hexo d # 部署到远程仓库
-
 hexo s # 本地预览
 ```
