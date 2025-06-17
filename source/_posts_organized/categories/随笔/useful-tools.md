@@ -7,7 +7,7 @@ tags:
 - useful tools
 ---
 
-# 常用流程
+# 常用工具
 
 ## 配置 zsh && oh-my-zsh
 
@@ -37,6 +37,50 @@ plugins=(git
         last-working-dir
         )
 ```
+
+
+
+## 安装 conda
+
+conda 是包和环境管理工具，能够很方便得拿到特定的环境，实现环境隔离。
+
+安装流程如下：
+
+1. Wget 下载
+
+```bash
+wget https://mirrors.bfsu.edu.cn/anaconda/archive/Anaconda3-2022.10-Linux-x86_64.sh --no-check-certificate
+```
+
+> :heavy_exclamation_mark: :heavy_exclamation_mark: :heavy_exclamation_mark:  如果出现报错信息：ERROR 403: Forbidden，需要加上 --user-agent=“Mozilla”
+
+```bash
+wget --user-agent="Mozilla" https://mirrors.bfsu.edu.cn/anaconda/archive/Anaconda3-2022.10-Linux-x86_
+64.sh --no-check-certificate
+```
+
+2. 执行安装脚本
+
+```bash
+bash Anaconda3-2021.11-Linux-x86_64.sh
+```
+
+3. 写入配置文件
+
+```bash
+echo 'export PATH="/home/ubuntu/anaconda3/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+> :exclamation::exclamation::exclamation: 注意这里需要明确的路径，而不是 `~/anaconda3/bin:$PATH`
+
+4. 执行 conda init [shell_name] 进行初始化
+
+```bash
+conda init zsh
+```
+
+conda 自带的脚本会执行一系列操作，完成初始配置。
 
 # 常见问题
 
