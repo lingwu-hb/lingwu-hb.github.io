@@ -4,6 +4,54 @@
 
 当需要对博客进行修改时，只需要对 `source` 文件夹中的源文件进行修改即可。为了保证在不同设备上编辑上传博客内容的一致性，我们需要在 Github 仓库的另外一个分支中维护 `source` 文件夹中的源文件。
 
+## 项目介绍
+
+这是一个基于 [Hexo](https://hexo.io/) 框架搭建的个人博客项目。Hexo 是一个快速、简洁且高效的静态博客框架，使用 Markdown 解析文章，可以快速生成静态网页并部署到 GitHub Pages 等平台。
+
+### 项目结构
+
+```
+.
+├── .deploy_git/          # 部署相关文件
+├── .git/                 # Git 版本控制文件
+├── .github/              # GitHub 相关配置
+├── .vscode/              # VS Code 配置
+├── node_modules/         # 依赖包
+├── public/               # 生成的静态文件
+├── scaffolds/            # 模板文件夹
+├── source/               # 源文件
+│   ├── _posts/           # 博客文章
+│   ├── _posts_organized/ # 分类整理的文章
+│   ├── categories/       # 分类页面
+│   ├── css/              # 自定义 CSS
+│   ├── img/              # 图片资源
+│   └── tags/             # 标签页面
+├── themes/               # 主题文件
+├── _config.yml           # 站点配置文件
+├── _config.landscape.yml # 主题配置文件
+├── deploy.bat            # 部署脚本
+├── package.json          # 项目依赖配置
+├── Readme.md             # 项目说明文档
+└── update_links.py       # 更新链接脚本
+```
+
+### 技术栈
+
+- **框架**：Hexo 静态博客框架
+- **主题**：Butterfly
+- **部署**：GitHub Pages
+- **版本控制**：Git (双分支策略)
+  - `main` 分支：存放生成的静态文件
+  - `source` 分支：存放博客源文件
+
+### 工作流程
+
+本项目采用双分支策略进行版本控制和部署：
+1. 在 `source` 分支上维护博客的源文件
+2. 通过 Hexo 将源文件生成为静态文件
+3. 将静态文件部署到 `main` 分支
+4. GitHub Pages 自动从 `main` 分支获取静态文件并展示
+
 ## 编辑博客流程
 
 ### 1. 同步 source 分支文件
