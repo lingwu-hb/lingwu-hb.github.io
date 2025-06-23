@@ -14,7 +14,7 @@ set "commit_msg=%~1"
 echo Starting deployment process...
 
 REM Check if Python is installed
-where python >nul 2>nul
+python --version >nul 2>nul
 if !errorlevel! neq 0 (
     echo Error: Python is not installed or not in PATH.
     echo Please install Python and try again.
