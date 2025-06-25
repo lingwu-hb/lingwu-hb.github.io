@@ -120,6 +120,10 @@ scp  -r local_dir username@servername:remote_dir
 
 
 
+
+
+
+
 # 常见问题
 
 ## Include 报错
@@ -154,3 +158,26 @@ scp  -r local_dir username@servername:remote_dir
     "version": 4
 }
 ```
+
+
+
+## 云服务器 ssh 断连
+
+ssh 服务的稳定需要占用一定的带宽和 IO，如果系统 CPU 和 IO 占用率过高，将会导致 ssh 超时而自动断开连接。
+
+解决方案：
+
+1. 提升 ssh cpu 占用优先级
+2. 提升 ssh 带宽占用优先级
+3. 修改 ssh 配置文件
+
+主要有以下几个思路，具体解决方案可以参考 AI 工具
+
+
+
+
+
+
+
+
+
