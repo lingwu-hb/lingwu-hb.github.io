@@ -13,27 +13,9 @@ set "commit_msg=%~1"
 
 echo Starting deployment process...
 
-REM Check if Python is installed
-python --version >nul 2>nul
-if !errorlevel! neq 0 (
-    echo Error: Python is not installed or not in PATH.
-    echo Please install Python and try again.
-    exit /b 1
-)
-
-REM Update symbolic links
-echo.
-echo [1/6] Updating post organization...
-python update_links.py
-if !errorlevel! neq 0 (
-    echo Warning: Failed to update post organization.
-    echo Continuing with deployment...
-)
-echo Successfully updated post organization.
-
 REM Git add
 echo.
-echo [2/6] Adding changes to git...
+echo [1/5] Adding changes to git...
 git add .
 if !errorlevel! neq 0 (
     echo Error: Failed to add changes to git.
@@ -44,7 +26,7 @@ echo Successfully added changes.
 
 REM Git commit
 echo.
-echo [3/6] Committing changes...
+echo [2/5] Committing changes...
 git commit -m "%commit_msg%"
 if !errorlevel! neq 0 (
     echo Error: Failed to commit changes.
@@ -55,7 +37,7 @@ echo Successfully committed changes.
 
 REM Git push
 echo.
-echo [4/6] Pushing to source branch...
+echo [3/5] Pushing to source branch...
 git push origin source:source
 if !errorlevel! neq 0 (
     echo Error: Failed to push to source branch.
@@ -66,7 +48,7 @@ echo Successfully pushed to source branch.
 
 REM Hexo generate
 echo.
-echo [5/6] Generating static files...
+echo [4/5] Generating static files...
 call hexo g
 if !errorlevel! neq 0 (
     echo Error: Failed to generate static files.
@@ -77,7 +59,7 @@ echo Successfully generated static files.
 
 REM Hexo deploy
 echo.
-echo [6/6] Deploying to GitHub Pages...
+echo [5/5] Deploying to GitHub Pages...
 call hexo d
 if !errorlevel! neq 0 (
     echo Error: Failed to deploy to GitHub Pages.
