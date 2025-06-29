@@ -26,6 +26,7 @@ def create_symlinks():
     
     # 如果链接目录已存在，先清空它
     if os.path.exists(links_base_dir):
+        print(f"清空目录: {links_base_dir}")
         shutil.rmtree(links_base_dir)
     
     # 创建基础链接目录
@@ -43,9 +44,11 @@ def create_symlinks():
     
     # 获取所有文章文件
     files = [f for f in os.listdir(posts_dir) if f.endswith('.md') and os.path.isfile(os.path.join(posts_dir, f))]
+    print(f"找到 {len(files)} 个文章文件")
     
     for file in files:
         file_path = os.path.join(posts_dir, file)
+        print(f"处理文件: {file}")
         
         # 读取文件内容
         try:
@@ -87,6 +90,8 @@ def create_symlinks():
                     if cat:
                         processed_categories.append(normalize_category(cat))
             
+            print(f"文件 {file} 的分类: {processed_categories}")
+            
             for category in processed_categories:
                 if not category:
                     continue
@@ -97,6 +102,7 @@ def create_symlinks():
                 # 创建符号链接
                 link_path = os.path.join(target_dir, file)
                 if os.path.exists(link_path):
+                    print(f"删除已存在的文件: {link_path}")
                     os.remove(link_path)
                 
                 # 计算相对路径
@@ -106,12 +112,15 @@ def create_symlinks():
                 if os.name == 'nt':
                     try:
                         # 在Windows上，使用复制而不是符号链接
+                        print(f"复制文件: {file_path} -> {link_path}")
                         shutil.copy2(file_path, link_path)
+                        print(f"复制成功: {file} -> {category}/{file}")
                     except Exception as e:
                         print(f"警告: 无法创建链接 {file} -> {category}/{file}: {e}")
                 else:
                     try:
                         os.symlink(rel_path, link_path)
+                        print(f"创建符号链接: {file} -> {category}/{file}")
                     except Exception as e:
                         print(f"警告: 无法创建链接 {file} -> {category}/{file}: {e}")
         
@@ -142,6 +151,7 @@ def create_symlinks():
             # 创建符号链接
             link_path = os.path.join(month_dir, file)
             if os.path.exists(link_path):
+                print(f"删除已存在的文件: {link_path}")
                 os.remove(link_path)
             
             # 计算相对路径
@@ -151,12 +161,15 @@ def create_symlinks():
             if os.name == 'nt':
                 try:
                     # 在Windows上，使用复制而不是符号链接
+                    print(f"复制文件: {file_path} -> {link_path}")
                     shutil.copy2(file_path, link_path)
+                    print(f"复制成功: {file} -> {year}/{month}/{file}")
                 except Exception as e:
                     print(f"警告: 无法创建链接 {file} -> {year}/{month}/{file}: {e}")
             else:
                 try:
                     os.symlink(rel_path, link_path)
+                    print(f"创建符号链接: {file} -> {year}/{month}/{file}")
                 except Exception as e:
                     print(f"警告: 无法创建链接 {file} -> {year}/{month}/{file}: {e}")
     
