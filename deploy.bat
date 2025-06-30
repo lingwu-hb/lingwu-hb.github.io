@@ -13,6 +13,28 @@ set "commit_msg=%~1"
 
 echo Starting deployment process...
 
+REM Check git status
+echo.
+echo [0/5] Checking for changes...
+git status --porcelain > temp_git_status.txt
+if !errorlevel! neq 0 (
+    echo Error: Failed to check git status.
+    echo Please check your git installation and try again.
+    del temp_git_status.txt
+    exit /b 1
+)
+
+REM Check if the temp file is empty (no changes)
+for %%F in (temp_git_status.txt) do set size=%%~zF
+if !size! equ 0 (
+    echo No changes detected in git repository.
+    echo Aborting deployment.
+    del temp_git_status.txt
+    exit /b 0
+)
+del temp_git_status.txt
+echo Changes detected. Proceeding with deployment...
+
 REM Git add
 echo.
 echo [1/5] Adding changes to git...
