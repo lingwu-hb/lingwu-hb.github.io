@@ -130,6 +130,12 @@ git checkout -b [new_branch] origin/[new_branch]
 
 本地新建一个分支，并跟踪远端的分支，然后切换到该分支。
 
+```bash
+git fetch; git status
+```
+
+先拉取远端分支信息，然后检查当前分支相对于远端分支的具体情况。可用于判断本地分支是否落后于远端分支。
+
 
 
 # 常见问题
