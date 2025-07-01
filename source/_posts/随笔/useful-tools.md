@@ -120,7 +120,15 @@ scp  -r local_dir username@servername:remote_dir
 
 
 
+## Git 常用命令
 
+### 分支相关
+
+```bash
+git checkout -b [new_branch] origin/[new_branch]
+```
+
+本地新建一个分支，并跟踪远端的分支，然后切换到该分支。
 
 
 
