@@ -138,6 +138,20 @@ git fetch; git status
 
 
 
+## vscode 常用插件配置
+
+1. Material Theme
+
+可以直接美化背景和代码高亮，非常好看
+
+2. GitLens
+
+经典的展示 git 提交历史的插件，也是非常好用
+
+3. CMake
+
+能使CMakeLists.txt的书写变得容易，具有自动补全和高亮功能。
+
 # 常见问题
 
 ## Include 报错
