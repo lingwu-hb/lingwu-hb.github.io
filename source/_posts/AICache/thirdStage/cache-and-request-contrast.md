@@ -7,8 +7,6 @@ tags:
 - ocf
 ---
 
-
-
 # 说明
 
 本文主要分析 ocf 和 tsprefetchus 中的 cache 和 request 数据差异
@@ -18,6 +16,8 @@ tags:
 ocf：https://github.com/lingwu-hb/ModifiedOCF
 
 tsprefetchus：https://github.com/lingwu-hb/libCacheSim
+
+
 
 # cache
 
@@ -134,6 +134,8 @@ struct ocf_cache_device {
 |                      | master_remaining       | 主设备计数器，跟踪主设备未完成的 IO 操作数。     |
 |                      | list                   | 链表节点，用于将请求加入队列或链表管理。         |
 |                      | discard                | 丢弃信息，记录需要丢弃的数据或操作信息。         |
+
+
 
 
 
@@ -265,4 +267,6 @@ struct ocf_cache_device {
 另外两种专家预取器执行操作的时候需要哪些内容，OCF 是否能够提供？
 
 初始化 cache->prefetcher->params 的时候，同时初始化对应两种预取器的参数即可
+
+
 
