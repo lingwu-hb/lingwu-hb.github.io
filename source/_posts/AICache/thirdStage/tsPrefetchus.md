@@ -2,7 +2,7 @@
 title: tsPrefetchus
 date: 2025-07-03 14:21:16
 categories:
-- data storage
+- AI
 tags:
 - prefetch
 ---
