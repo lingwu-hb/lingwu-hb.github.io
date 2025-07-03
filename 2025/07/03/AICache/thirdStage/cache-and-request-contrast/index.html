@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>cache and request contrast | Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="说明 本文主要分析 ocf 和 tsprefetchus 中的 cache 和 request 数据差异 代码地址： ocf tsprefetchus">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>cache and request contrast | Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="说明 本文主要分析 ocf 和 tsprefetchus 中的 cache 和 request 数据差异 代码地址： ocf：https:&#x2F;&#x2F;github.com&#x2F;lingwu-hb&#x2F;ModifiedOCF tsprefetchus：https:&#x2F;&#x2F;github.com&#x2F;lingwu-hb&#x2F;libCacheSim cache ocf    struct ocf_cache_device* devi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cache and request contrast">
 <meta property="og:url" content="https://lingwu-hb.github.io/2025/07/03/AICache/thirdStage/cache-and-request-contrast/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="说明 本文主要分析 ocf 和 tsprefetchus 中的 cache 和 request 数据差异 代码地址： ocf tsprefetchus">
+<meta property="og:description" content="说明 本文主要分析 ocf 和 tsprefetchus 中的 cache 和 request 数据差异 代码地址： ocf：https:&#x2F;&#x2F;github.com&#x2F;lingwu-hb&#x2F;ModifiedOCF tsprefetchus：https:&#x2F;&#x2F;github.com&#x2F;lingwu-hb&#x2F;libCacheSim cache ocf    struct ocf_cache_device* devi">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
 <meta property="article:published_time" content="2025-07-03T01:20:11.000Z">
-<meta property="article:modified_time" content="2025-07-03T01:43:52.829Z">
+<meta property="article:modified_time" content="2025-07-03T06:20:36.556Z">
 <meta property="article:author" content="Bo Han">
 <meta property="article:tag" content="ocf">
 <meta name="twitter:card" content="summary">
@@ -18,7 +18,7 @@
   "url": "https://lingwu-hb.github.io/2025/07/03/AICache/thirdStage/cache-and-request-contrast/",
   "image": "https://lingwu-hb.github.io/img/yaojie.jpg",
   "datePublished": "2025-07-03T01:20:11.000Z",
-  "dateModified": "2025-07-03T01:43:52.829Z",
+  "dateModified": "2025-07-03T06:20:36.556Z",
   "author": [
     {
       "@type": "Person",
@@ -159,12 +159,359 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">cache and request contrast</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">cache and request contrast</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-07-03T01:43:52.829Z" title="Updated 2025-07-03 09:43:52">2025-07-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>说明</h1>
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">cache and request contrast</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">cache and request contrast</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-07-03T06:20:36.556Z" title="Updated 2025-07-03 14:20:36">2025-07-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>说明</h1>
 <p>本文主要分析 ocf 和 tsprefetchus 中的 cache 和 request 数据差异</p>
 <p>代码地址：</p>
-<p>ocf</p>
-<p>tsprefetchus</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io">Bo Han</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io/2025/07/03/AICache/thirdStage/cache-and-request-contrast/">https://lingwu-hb.github.io/2025/07/03/AICache/thirdStage/cache-and-request-contrast/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ocf/">ocf</a></div><div class="post-share"><div class="social-share" data-image="/img/yaojie.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">spdk</div></div><div class="info-2"><div class="info-item-1">文档 本文档主要用于梳理 spdk 相关概念和代码 简单理解就是： spdk 让应用程序可以直接访问到底层的存储介质，避免了繁琐的中断操作，从而提升了存储效率（不太确定） ocf 作为缓存管理框架，用于管理多级缓存的存储工作，能够封装底层的多级缓存，提供更加快速的缓存读写操作和多种读写策略。  ❗ 以下内容由 cursor 生成，仅供参考 ❗  spdk 与 ocf 之间的桥梁 module/bdev/ocf 文件夹是连接 SPDK 和 OCF 的桥梁，它实现了一个 SPDK 块设备（bdev）模块，让 OCF 缓存功能能够在 SPDK 框架中使用。 主要文件及其功能  vbdev_ocf.c/h：    实现了虚拟块设备（Virtual Block Device）的核心功能   定义了 OCF 缓存设备在 SPDK 中的表示和行为   处理设备的注册、初始化和销毁   管理 I/O 操作的提交和完成    vbdev_ocf_rpc.c：    实现了 RPC（远程过程调用）接口   允许用户通过 SPDK 的 RPC 机制创建、配置和管理 OCF 缓存设备   提供了如...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/03/24/AICache/ocf-lock-analysis/" title="ocf lock analysis"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-24</div><div class="info-item-2">ocf lock analysis</div></div><div class="info-2"><div class="info-item-1">锁机制分析 OCF 中设计了多种多样的锁来进行并发控制。最常见的为元数据锁和缓存行锁。 元数据锁 缓存相关的元数据，包括缓存映射信息、缓存哈希表数据以及缓存状态信息等。 123456// 获取元数据的读锁，后续读取元数据信息ocf_hb_req_prot_lock_rd(req);ocf_hb_req_prot_unlock_rd(req);// 锁升级，先释放掉所有的读锁，然后再拿去写锁。顺序拿取，防止死锁ocf_hb_req_prot_lock_upgrade(req);ocf_hb_req_prot_unlock_wr(req); 缓存行锁 缓存行锁针对的粒度为缓存行，并且使用了分级获取的方式 首先尝试快速获取锁，如果快速获取锁失败，再慢速获取锁。 快速获取是同步进行获取，不会阻塞，一旦有一个缓存行获取失败，直接退出。 慢速获取会尝试获取每一个锁，如果获取不到，将会考虑将其放置到等待队列，直到成功获取锁才执行回调函数。（代码片段如下） 1234567891011int ocf_alock_lock_rd(struct ocf_alock *alock,		struct...</div></div></div></a><a class="pagination-related" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-01</div><div class="info-item-2">spdk</div></div><div class="info-2"><div class="info-item-1">文档 本文档主要用于梳理 spdk 相关概念和代码 简单理解就是： spdk 让应用程序可以直接访问到底层的存储介质，避免了繁琐的中断操作，从而提升了存储效率（不太确定） ocf 作为缓存管理框架，用于管理多级缓存的存储工作，能够封装底层的多级缓存，提供更加快速的缓存读写操作和多种读写策略。  ❗ 以下内容由 cursor 生成，仅供参考 ❗  spdk 与 ocf 之间的桥梁 module/bdev/ocf 文件夹是连接 SPDK 和 OCF 的桥梁，它实现了一个 SPDK 块设备（bdev）模块，让 OCF 缓存功能能够在 SPDK 框架中使用。 主要文件及其功能  vbdev_ocf.c/h：    实现了虚拟块设备（Virtual Block Device）的核心功能   定义了 OCF 缓存设备在 SPDK 中的表示和行为   处理设备的注册、初始化和销毁   管理 I/O 操作的提交和完成    vbdev_ocf_rpc.c：    实现了 RPC（远程过程调用）接口   允许用户通过 SPDK 的 RPC 机制创建、配置和管理 OCF 缓存设备   提供了如...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">32</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/29/%E5%BC%80%E9%A2%98/%E5%89%8D%E6%9C%9F%E8%B0%83%E7%A0%94/" title="前期调研">前期调研</a><time datetime="2025-06-29T05:00:30.000Z" title="Created 2025-06-29 13:00:30">2025-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/" title="tsPrefetcher 调研">tsPrefetcher 调研</a><time datetime="2025-06-29T04:55:08.000Z" title="Created 2025-06-29 12:55:08">2025-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/29/AICache/%E4%B8%80%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%9D%90%E6%96%99%E6%B1%87%E6%80%BB/" title="一二阶段材料汇总">一二阶段材料汇总</a><time datetime="2025-06-29T04:50:19.000Z" title="Created 2025-06-29 12:50:19">2025-06-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+<p>ocf：<a target="_blank" rel="noopener" href="https://github.com/lingwu-hb/ModifiedOCF">https://github.com/lingwu-hb/ModifiedOCF</a></p>
+<p>tsprefetchus：<a target="_blank" rel="noopener" href="https://github.com/lingwu-hb/libCacheSim">https://github.com/lingwu-hb/libCacheSim</a></p>
+<h1>cache</h1>
+<h2 id="ocf">ocf</h2>
+<table>
+<thead>
+<tr>
+<th>struct ocf_cache_device* device;</th>
+<th>指向缓存设备结构体，包含缓存设备的相关信息<br />查缓存基本都是靠 device</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>struct list_head list;</td>
+<td>链表头，用于将缓存实例链接到全局缓存列表中</td>
+</tr>
+<tr>
+<td>struct list_head io_queues;</td>
+<td>I/O队列链表，管理I/O请求队列</td>
+</tr>
+<tr>
+<td>struct ocf_metadata metadata;</td>
+<td>缓存元数据</td>
+</tr>
+<tr>
+<td>unsigned long cache_state;</td>
+<td>缓存状态标志，控制缓存是否接受IO请求</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>ocf_cache 数据结构：管理缓存设备、核心设备、元数据、I/O请求以及各种缓存策略。</p>
+<h2 id="tspre">tspre</h2>
+<table>
+<thead>
+<tr>
+<th>struct hashtable *hashtable;</th>
+<th>哈希表指针，用于快速查找缓存中的对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>各种函数指针</td>
+<td>get, find, insert, evict 等等缓存操作</td>
+</tr>
+<tr>
+<td>prefetcher_t *prefetcher;</td>
+<td>该 cache 对应的 预取器</td>
+</tr>
+<tr>
+<td>int64_t n_req;</td>
+<td>请求的数量，部分淘汰算法需要用到该参数</td>
+</tr>
+<tr>
+<td>int64_t n_obj;</td>
+<td>缓存中对象的数量（应通过 get_n_obj 函数访问）</td>
+</tr>
+<tr>
+<td>int64_t occupied_byte;</td>
+<td>已占用的字节数（应通过 get_occupied_byte 函数访问）</td>
+</tr>
+<tr>
+<td>int64_t cache_size;</td>
+<td>缓存大小（字节）</td>
+</tr>
+<tr>
+<td>int64_t default_ttl;</td>
+<td>对象默认生存时间</td>
+</tr>
+<tr>
+<td>int32_t obj_md_size;</td>
+<td>对象元数据大小</td>
+</tr>
+<tr>
+<td>char cache_name[CACHE_NAME_ARRAY_LEN];</td>
+<td>缓存名称</td>
+</tr>
+<tr>
+<td>char init_params[CACHE_INIT_PARAMS_LEN];</td>
+<td>初始化参数</td>
+</tr>
+</tbody>
+</table>
+<h1>request</h1>
+<h2 id="ocf-v2">ocf</h2>
+<h3 id="核心IO信息（最基础必需的）">核心IO信息（最基础必需的）</h3>
+<ol>
+<li>
+<p>byte_position - 请求的起始地址</p>
+</li>
+<li>
+<p>byte_length - 请求的长度</p>
+</li>
+<li>
+<p>rw - 读写方向</p>
+</li>
+<li>
+<p>data - 请求数据指针</p>
+</li>
+</ol>
+<h3 id="缓存管理必要字段（对缓存系统至关重要）">缓存管理必要字段（对缓存系统至关重要）</h3>
+<ol>
+<li>
+<p>cache 和 core - 缓存和核心设备句柄</p>
+</li>
+<li>
+<p>core_line_first/core_line_last/core_line_count - 缓存行映射信息</p>
+</li>
+<li>
+<p>cache_mode - 缓存模式</p>
+</li>
+<li>
+<p>part_id - 分区ID</p>
+</li>
+<li>
+<p>dirty - 脏数据标记</p>
+</li>
+<li>
+<p>map - 缓存映射信息</p>
+</li>
+</ol>
+<h3 id="请求状态和控制（请求生命周期管理）">请求状态和控制（请求生命周期管理）</h3>
+<ol>
+<li>
+<p>ref_count - 引用计数</p>
+</li>
+<li>
+<p>req_remaining - 剩余IO操作数</p>
+</li>
+<li>
+<p>error - 错误状态</p>
+</li>
+<li>
+<p>complete - 完成回调</p>
+</li>
+<li>
+<p>io_queue - IO队列句柄</p>
+</li>
+</ol>
+<h3 id="锁定和并发控制">锁定和并发控制</h3>
+<ol>
+<li>
+<p>lock_remaining - 待锁定缓存行数</p>
+</li>
+<li>
+<p>alock_status - 锁状态映射</p>
+</li>
+<li>
+<p>alock_rw - 锁读写模式</p>
+</li>
+<li>
+<p>lock_idx - 元数据锁索引</p>
+</li>
+</ol>
+<h3 id="缓存策略相关（影响缓存决策）">缓存策略相关（影响缓存决策）</h3>
+<ol>
+<li>
+<p>force_pt - 强制直通</p>
+</li>
+<li>
+<p>allow_second_admission - 二次准入控制</p>
+</li>
+<li>
+<p>part_evict - 分区驱逐标记</p>
+</li>
+<li>
+<p>seq_cutoff - 顺序截断标记</p>
+</li>
+</ol>
+<h3 id="性能优化和跟踪">性能优化和跟踪</h3>
+<ol>
+<li>
+<p>timestamp - 时间戳</p>
+</li>
+<li>
+<p>sid - 序列ID</p>
+</li>
+<li>
+<p>cp_data - 数据副本（用于某些优化场景）</p>
+</li>
+</ol>
+<h3 id="内部实现细节（相对边缘）">内部实现细节（相对边缘）</h3>
+<ol>
+<li>
+<p>ioi - 内部IO结构</p>
+</li>
+<li>
+<p>engine_cbs - 引擎回调</p>
+</li>
+<li>
+<p>io_if - IO接口</p>
+</li>
+<li>
+<p>priv - 私有数据</p>
+</li>
+<li>
+<p>master_io_req - 主IO请求</p>
+</li>
+<li>
+<p>master_io_req_type - 主请求类型</p>
+</li>
+<li>
+<p>master_remaining - 主设备计数器</p>
+</li>
+<li>
+<p>list - 链表节点</p>
+</li>
+<li>
+<p>discard - 丢弃信息</p>
+</li>
+</ol>
+<h2 id="tspre-v2">tspre</h2>
+<h3 id="核心字段">核心字段</h3>
+<ul>
+<li>
+<p>clock_time: 请求的时间戳</p>
+</li>
+<li>
+<p>obj_id: 对象ID，标识请求的对象</p>
+</li>
+<li>
+<p>obj_size: 对象大小</p>
+</li>
+<li>
+<p>op: 请求操作类型</p>
+</li>
+<li>
+<p>hv: 哈希值，用于卸载哈希到读取器</p>
+</li>
+<li>
+<p>valid: 表示请求是否有效</p>
+</li>
+</ul>
+<h3 id="重要但非核心字段">重要但非核心字段</h3>
+<ul>
+<li>
+<p>ttl: 生存时间</p>
+</li>
+<li>
+<p>n_req: 请求计数</p>
+</li>
+<li>
+<p>next_access_vtime: 下次访问的虚拟时间</p>
+</li>
+<li>
+<p>eviction_algo_data: 驱逐算法数据</p>
+</li>
+<li>
+<p>key_size/val_size: 键值大小</p>
+</li>
+</ul>
+<h3 id="元数据-分类字段">元数据/分类字段</h3>
+<ul>
+<li>
+<p>ns: 命名空间</p>
+</li>
+<li>
+<p>content_type: 内容类型</p>
+</li>
+<li>
+<p>tenant_id: 租户ID</p>
+</li>
+<li>
+<p>bucket_id: 桶ID</p>
+</li>
+</ul>
+<h3 id="分析用途字段">分析用途字段</h3>
+<ul>
+<li>
+<p>vtime_since_last_access: 自上次访问以来的虚拟时间</p>
+</li>
+<li>
+<p>rtime_since_last_access: 自上次访问以来的实际时间</p>
+</li>
+<li>
+<p>prev_size: 之前的大小</p>
+</li>
+<li>
+<p>create_rtime: 创建时间</p>
+</li>
+<li>
+<p>compulsory_miss: 是否为强制缺失</p>
+</li>
+<li>
+<p>overwrite: 是否覆盖之前的对象</p>
+</li>
+<li>
+<p>first_seen_in_window: 在时间窗口内首次看到</p>
+</li>
+</ul>
+<h3 id="边缘字段">边缘字段</h3>
+<ul>
+<li>
+<p>age: 年龄</p>
+</li>
+<li>
+<p>hostname: 主机名</p>
+</li>
+<li>
+<p>extension: 扩展</p>
+</li>
+<li>
+<p>colo: 托管位置</p>
+</li>
+<li>
+<p>n_level/n_param: 级别和参数数量</p>
+</li>
+<li>
+<p>method: 方法</p>
+</li>
+<li>
+<p>prefetch_flag: 预取标志</p>
+</li>
+<li>
+<p>trigger_block: 触发预取的块</p>
+</li>
+<li>
+<p>offset_end: 标记是否有偏移量结束</p>
+</li>
+</ul>
+<h1>ocf 缺少的信息</h1>
+<ol>
+<li>cache-&gt;prefetcher-&gt;params</li>
+</ol>
+<p>初始化预取器的参数，后续操作的时候需要提取预取器参数信息</p>
+<ol start="2">
+<li>req-&gt;trigger_block 和 req-&gt;prefetch_flag 字段</li>
+</ol>
+<p>是否为预取进入缓存，触发预取操作的对象</p>
+<p>TODO：另外两种专家预取器执行操作的时候需要哪些内容，OCF 是否能够提供？</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io">Bo Han</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io/2025/07/03/AICache/thirdStage/cache-and-request-contrast/">https://lingwu-hb.github.io/2025/07/03/AICache/thirdStage/cache-and-request-contrast/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/ocf/">ocf</a></div><div class="post-share"><div class="social-share" data-image="/img/yaojie.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">spdk</div></div><div class="info-2"><div class="info-item-1">文档 本文档主要用于梳理 spdk 相关概念和代码 简单理解就是： spdk 让应用程序可以直接访问到底层的存储介质，避免了繁琐的中断操作，从而提升了存储效率（不太确定） ocf 作为缓存管理框架，用于管理多级缓存的存储工作，能够封装底层的多级缓存，提供更加快速的缓存读写操作和多种读写策略。  ❗ 以下内容由 cursor 生成，仅供参考 ❗  spdk 与 ocf 之间的桥梁 module/bdev/ocf 文件夹是连接 SPDK 和 OCF 的桥梁，它实现了一个 SPDK 块设备（bdev）模块，让 OCF 缓存功能能够在 SPDK 框架中使用。 主要文件及其功能  vbdev_ocf.c/h：    实现了虚拟块设备（Virtual Block Device）的核心功能   定义了 OCF 缓存设备在 SPDK 中的表示和行为   处理设备的注册、初始化和销毁   管理 I/O 操作的提交和完成    vbdev_ocf_rpc.c：    实现了 RPC（远程过程调用）接口   允许用户通过 SPDK 的 RPC 机制创建、配置和管理 OCF 缓存设备   提供了如...</div></div></div></a><a class="pagination-related" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">tsPrefetchus</div></div><div class="info-2"><div class="info-item-1">第三阶段需要在 ocf 中实现的预取器有以下几个关键点：  预取出来的 IO 会如何进行处理？会不会和原 IO 串行处理，从而影响原 IO？  空间上会抢占 cache 的空间；时间上，若生成预取 IO 的速度太慢，将会影响下一个原 IO 的处理速度。  该预取器集成了时间和空间预取器？分别而言，时间和空间预取器各自是如何展开工作的呢？  详见下文 Mithril 和 OBL tsPrefetchus 预取器 概述 tsPrefetchus 是一个混合预取器，它结合了两种不同类型的预取策略：  顺序预取器（sequential prefetcher）：如** OBL**, AMP, Leap 等 历史预取器（history prefetcher）：如 Mithril, PG 等  这个预取器的核心思想是动态调整这两种预取策略的权重，以适应不同的访问模式。 工作原理 混合预取策略 tsPrefetchus...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/03/24/AICache/ocf-lock-analysis/" title="ocf lock analysis"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-24</div><div class="info-item-2">ocf lock analysis</div></div><div class="info-2"><div class="info-item-1">锁机制分析 OCF 中设计了多种多样的锁来进行并发控制。最常见的为元数据锁和缓存行锁。 元数据锁 缓存相关的元数据，包括缓存映射信息、缓存哈希表数据以及缓存状态信息等。 123456// 获取元数据的读锁，后续读取元数据信息ocf_hb_req_prot_lock_rd(req);ocf_hb_req_prot_unlock_rd(req);// 锁升级，先释放掉所有的读锁，然后再拿去写锁。顺序拿取，防止死锁ocf_hb_req_prot_lock_upgrade(req);ocf_hb_req_prot_unlock_wr(req); 缓存行锁 缓存行锁针对的粒度为缓存行，并且使用了分级获取的方式 首先尝试快速获取锁，如果快速获取锁失败，再慢速获取锁。 快速获取是同步进行获取，不会阻塞，一旦有一个缓存行获取失败，直接退出。 慢速获取会尝试获取每一个锁，如果获取不到，将会考虑将其放置到等待队列，直到成功获取锁才执行回调函数。（代码片段如下） 1234567891011int ocf_alock_lock_rd(struct ocf_alock *alock,		struct...</div></div></div></a><a class="pagination-related" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-01</div><div class="info-item-2">spdk</div></div><div class="info-2"><div class="info-item-1">文档 本文档主要用于梳理 spdk 相关概念和代码 简单理解就是： spdk 让应用程序可以直接访问到底层的存储介质，避免了繁琐的中断操作，从而提升了存储效率（不太确定） ocf 作为缓存管理框架，用于管理多级缓存的存储工作，能够封装底层的多级缓存，提供更加快速的缓存读写操作和多种读写策略。  ❗ 以下内容由 cursor 生成，仅供参考 ❗  spdk 与 ocf 之间的桥梁 module/bdev/ocf 文件夹是连接 SPDK 和 OCF 的桥梁，它实现了一个 SPDK 块设备（bdev）模块，让 OCF 缓存功能能够在 SPDK 框架中使用。 主要文件及其功能  vbdev_ocf.c/h：    实现了虚拟块设备（Virtual Block Device）的核心功能   定义了 OCF 缓存设备在 SPDK 中的表示和行为   处理设备的注册、初始化和销毁   管理 I/O 操作的提交和完成    vbdev_ocf_rpc.c：    实现了 RPC（远程过程调用）接口   允许用户通过 SPDK 的 RPC 机制创建、配置和管理 OCF 缓存设备   提供了如...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">31</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">33</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">cache</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ocf"><span class="toc-number">2.1.</span> <span class="toc-text">ocf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tspre"><span class="toc-number">2.2.</span> <span class="toc-text">tspre</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">request</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ocf-v2"><span class="toc-number">3.1.</span> <span class="toc-text">ocf</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83IO%E4%BF%A1%E6%81%AF%EF%BC%88%E6%9C%80%E5%9F%BA%E7%A1%80%E5%BF%85%E9%9C%80%E7%9A%84%EF%BC%89"><span class="toc-number">3.1.1.</span> <span class="toc-text">核心IO信息（最基础必需的）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E7%AE%A1%E7%90%86%E5%BF%85%E8%A6%81%E5%AD%97%E6%AE%B5%EF%BC%88%E5%AF%B9%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F%E8%87%B3%E5%85%B3%E9%87%8D%E8%A6%81%EF%BC%89"><span class="toc-number">3.1.2.</span> <span class="toc-text">缓存管理必要字段（对缓存系统至关重要）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E7%8A%B6%E6%80%81%E5%92%8C%E6%8E%A7%E5%88%B6%EF%BC%88%E8%AF%B7%E6%B1%82%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86%EF%BC%89"><span class="toc-number">3.1.3.</span> <span class="toc-text">请求状态和控制（请求生命周期管理）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E5%AE%9A%E5%92%8C%E5%B9%B6%E5%8F%91%E6%8E%A7%E5%88%B6"><span class="toc-number">3.1.4.</span> <span class="toc-text">锁定和并发控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5%E7%9B%B8%E5%85%B3%EF%BC%88%E5%BD%B1%E5%93%8D%E7%BC%93%E5%AD%98%E5%86%B3%E7%AD%96%EF%BC%89"><span class="toc-number">3.1.5.</span> <span class="toc-text">缓存策略相关（影响缓存决策）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%92%8C%E8%B7%9F%E8%B8%AA"><span class="toc-number">3.1.6.</span> <span class="toc-text">性能优化和跟踪</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82%EF%BC%88%E7%9B%B8%E5%AF%B9%E8%BE%B9%E7%BC%98%EF%BC%89"><span class="toc-number">3.1.7.</span> <span class="toc-text">内部实现细节（相对边缘）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tspre-v2"><span class="toc-number">3.2.</span> <span class="toc-text">tspre</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.1.</span> <span class="toc-text">核心字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E4%BD%86%E9%9D%9E%E6%A0%B8%E5%BF%83%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.2.</span> <span class="toc-text">重要但非核心字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE-%E5%88%86%E7%B1%BB%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.3.</span> <span class="toc-text">元数据&#x2F;分类字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%94%A8%E9%80%94%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.4.</span> <span class="toc-text">分析用途字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%BC%98%E5%AD%97%E6%AE%B5"><span class="toc-number">3.2.5.</span> <span class="toc-text">边缘字段</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">ocf 缺少的信息</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/29/%E5%BC%80%E9%A2%98/%E5%89%8D%E6%9C%9F%E8%B0%83%E7%A0%94/" title="前期调研">前期调研</a><time datetime="2025-06-29T05:00:30.000Z" title="Created 2025-06-29 13:00:30">2025-06-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/" title="tsPrefetcher 调研">tsPrefetcher 调研</a><time datetime="2025-06-29T04:55:08.000Z" title="Created 2025-06-29 12:55:08">2025-06-29</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
   const loadMathjax = () => {
     if (!window.MathJax) {
       window.MathJax = {
