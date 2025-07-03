@@ -124,17 +124,56 @@ scp  -r local_dir username@servername:remote_dir
 
 ### 分支相关
 
+操作1：本地新建一个分支，并跟踪远端的分支，然后切换到该分支。
+
 ```bash
 git checkout -b [new_branch] origin/[new_branch]
 ```
 
-本地新建一个分支，并跟踪远端的分支，然后切换到该分支。
+操作2：先拉取远端分支信息，然后检查当前分支相对于远端分支的具体情况。可用于判断本地分支是否落后于远端分支。
+
 
 ```bash
 git fetch; git status
 ```
 
-先拉取远端分支信息，然后检查当前分支相对于远端分支的具体情况。可用于判断本地分支是否落后于远端分支。
+操作3：给当前分支修改名称
+
+```bash
+git branch -M <new_branch_name>
+```
+
+操作4：git commit 后，再修改 .gitignore 文件，让 .gitignore 文件生效。
+
+```bash
+git rm -r --cached <file-or-directory>
+```
+* `file-or-directory` 是你不想要继续跟踪的文件或目录路径。
+* `--cached` 确保文件只从 `Git` 的索引中移除，本地文件不会被删除。
+
+```bash
+git commit --amend --no-edit
+```
+* 执行 `git rm -r --cached` 后，运行此命令会更新最近的提交，去掉不想要的文件。
+* `--no-edit` 表示保留原提交信息，不需要修改。
+
+然后再进行后续的提交操作即可。
+
+
+### 远端仓库相关
+
+操作1：添加/删除远程仓库关联到本地仓库
+
+```bash
+git remote add/remove <remote hub name> <remote hub url>
+```
+
+操作2：强制将本地仓库内容覆盖到远端仓库
+
+```bash
+git push --force origin main:main
+```
+
 
 
 
