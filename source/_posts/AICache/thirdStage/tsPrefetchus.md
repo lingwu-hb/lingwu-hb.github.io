@@ -366,12 +366,8 @@ typedef struct OBL_params {
 
 
 
-# Das 中实现
+# OCF 中实现
 
-1. 同步和异步的问题
+参考本网站系列后续系列文档
 
-das 中预取推荐的过程和处理正常 IO 的过程是相互异步的，推荐的过程不会影响后续的正常 IO;
-
-METS 中则是每次处理完成一个 IO 之后，都会进行预取操作
-
-1. 
+https://lingwu-hb.github.io/2025/07/03/AICache/thirdStage/cache-and-request-contrast/ 
