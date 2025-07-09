@@ -7,7 +7,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
 <meta property="article:published_time" content="2025-07-09T08:40:28.000Z">
-<meta property="article:modified_time" content="2025-07-09T09:12:05.851Z">
+<meta property="article:modified_time" content="2025-07-09T09:31:56.324Z">
 <meta property="article:author" content="Bo Han">
 <meta property="article:tag" content="prefetch algo">
 <meta name="twitter:card" content="summary">
@@ -18,7 +18,7 @@
   "url": "https://lingwu-hb.github.io/2025/07/09/AICache/thirdStage/Mithril-intro/",
   "image": "https://lingwu-hb.github.io/img/yaojie.jpg",
   "datePublished": "2025-07-09T08:40:28.000Z",
-  "dateModified": "2025-07-09T09:12:05.851Z",
+  "dateModified": "2025-07-09T09:31:56.324Z",
   "author": [
     {
       "@type": "Person",
@@ -159,7 +159,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">Mithril intro</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Mithril intro</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-07-09T09:12:05.851Z" title="Updated 2025-07-09 17:12:05">2025-07-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Mithril-算法数据结构">Mithril 算法数据结构</h1>
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">Mithril intro</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Mithril intro</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-07-09T09:31:56.324Z" title="Updated 2025-07-09 17:31:56">2025-07-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Mithril-算法数据结构">Mithril 算法数据结构</h1>
 <h2 id="rec-mining-t-数据结构">rec_mining_t 数据结构</h2>
 <p><code>rec_mining_t</code> 是 Mithril 算法中用于记录和挖掘访问模式的核心数据结构，它包含以下关键组件：</p>
 <h3 id="主要组件">主要组件</h3>
@@ -405,12 +405,12 @@
 <tr>
 <td><code>mining_threshold</code></td>
 <td>5120</td>
-<td>挖掘阈值，决定挖掘表达到多少条目时触发挖掘过程</td>
+<td>挖掘阈值，决定记录表达到多少条目时触发挖掘过程</td>
 </tr>
 <tr>
-<td><code>sequential_type</code></td>
-<td>0</td>
-<td>顺序预取类型，是否启用简单的顺序预取策略</td>
+<td><code>mtable_size</code></td>
+<td>mining_threshold / min_support)</td>
+<td>记录表的最大长度限制</td>
 </tr>
 </tbody>
 </table>
