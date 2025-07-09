@@ -303,8 +303,8 @@ Mithril 算法的关键参数及其影响：
 | `confidence` | 1 | 置信度，表示可接受的时间戳不匹配次数，影响关联发现的容错性 |
 | `pf_list_size` | 2 | 每个块关联的预取对象最大数量，影响预取广度 |
 | `rec_trigger` | each_req | 记录触发器，决定何时记录块访问（miss/evict/miss_evict/each_req） |
-| `mining_threshold` | 5120 | 挖掘阈值，决定挖掘表达到多少条目时触发挖掘过程 |
-| `sequential_type` | 0 | 顺序预取类型，是否启用简单的顺序预取策略 |
+| `mining_threshold` | 5120 | 挖掘阈值，决定记录表达到多少条目时触发挖掘过程 |
+| `mtable_size` | mining_threshold / min_support) | 记录表的最大长度限制 |
 
 这些参数共同影响 Mithril 的预取性能与资源消耗，可以根据不同的工作负载特性进行调整，以优化命中率和资源利用。例如：
 
