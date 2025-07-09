@@ -312,10 +312,6 @@ associated_flag = TRUE，将A和B添加到预取表
 
 因为没有相邻时间戳，且first_flag已经为FALSE，所以associated_flag = FALSE，不添加到预取表
 
-
-
-
-
 # OBL 
 
 典型的空间关联预取策略

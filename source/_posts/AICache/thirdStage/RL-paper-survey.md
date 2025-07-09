@@ -125,6 +125,17 @@ A：论文中没提，大概率不需要，因此这里的热页面阈值可能�
 
 
 
+### 后续
+
+1. 重点讲解一下有关 RL 部分内容
+2. 学习一下如何讲故事，如何阐述 RL 的作用
+3. 抽象展开成输入输出，抽象成黑盒，抽出 RL 框架
+4. 再进一步，改动多臂老虎机成 RL 的可行性
+
+
+
+
+
 ## 关联文章
 
 1. CHROME: Concurrency-Aware Holistic Cache Management Framework with Online Reinforcement Learning
