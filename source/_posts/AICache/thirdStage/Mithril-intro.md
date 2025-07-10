@@ -252,7 +252,7 @@ if (prefetch_table_index) {
 
 ## 流程图示
 
-![Mithril示意图](\img\Mithril示意图.png)
+<img src="\img\Mithril示意图.png" alt="Mithril示意图"/>
 
 最上面是简化的记录表
 
