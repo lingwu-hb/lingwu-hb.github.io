@@ -7,7 +7,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
 <meta property="article:published_time" content="2025-07-09T08:40:28.000Z">
-<meta property="article:modified_time" content="2025-07-09T09:31:56.324Z">
+<meta property="article:modified_time" content="2025-07-10T01:26:20.887Z">
 <meta property="article:author" content="Bo Han">
 <meta property="article:tag" content="prefetch algo">
 <meta name="twitter:card" content="summary">
@@ -18,7 +18,7 @@
   "url": "https://lingwu-hb.github.io/2025/07/09/AICache/thirdStage/Mithril-intro/",
   "image": "https://lingwu-hb.github.io/img/yaojie.jpg",
   "datePublished": "2025-07-09T08:40:28.000Z",
-  "dateModified": "2025-07-09T09:31:56.324Z",
+  "dateModified": "2025-07-10T01:26:20.887Z",
   "author": [
     {
       "@type": "Person",
@@ -159,7 +159,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">Mithril intro</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Mithril intro</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-07-09T09:31:56.324Z" title="Updated 2025-07-09 17:31:56">2025-07-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Mithril-算法数据结构">Mithril 算法数据结构</h1>
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">Mithril intro</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Mithril intro</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-07-10T01:26:20.887Z" title="Updated 2025-07-10 09:26:20">2025-07-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Mithril-算法数据结构">Mithril 算法数据结构</h1>
 <h2 id="rec-mining-t-数据结构">rec_mining_t 数据结构</h2>
 <p><code>rec_mining_t</code> 是 Mithril 算法中用于记录和挖掘访问模式的核心数据结构，它包含以下关键组件：</p>
 <h3 id="主要组件">主要组件</h3>
@@ -324,7 +324,7 @@
 <p>当缓存接收到一个请求时，Mithril 会查找预取表进行预取：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril.c 第 390-405 行</span></span><br><span class="line">gint prefetch_table_index = GPOINTER_TO_INT(g_hash_table_lookup(</span><br><span class="line">    Mithril_params-&gt;prefetch_hashtable, GINT_TO_POINTER(req-&gt;obj_id)));</span><br><span class="line"></span><br><span class="line"><span class="comment">// ... 获取预取表中的预取项 ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (prefetch_table_index) &#123;</span><br><span class="line">  <span class="comment">// 从预取表获取关联块并进行预取</span></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; Mithril_params-&gt;pf_list_size + <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (Mithril_params-&gt;ptable_array[dim1][dim2 + i] == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    new_req-&gt;obj_id = Mithril_params-&gt;ptable_array[dim1][dim2 + i];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... 执行实际预取操作 ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="流程图示">流程图示</h2>
-<p><img src="%5Cimg%5CMithril%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="Mithril示意图"></p>
+<img src="\img\Mithril示意图.png" alt="Mithril示意图"/>
 <p>最上面是简化的记录表</p>
 <p>左侧是挖掘表</p>
 <p>最右侧是判断两个请求是否相关联。如果相关联，将其存入到预取表（哈希表）。预取表中，key -&gt; 触发预取的请求，value -&gt; 与 key 相关联的请求。</p>
