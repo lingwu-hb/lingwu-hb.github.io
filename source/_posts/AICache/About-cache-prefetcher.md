@@ -24,6 +24,8 @@ Baleen 通过模仿 OPT 来训练一个 ML-based 准入和预取模型。
 
 > 每个 episode 监控的范围是 4MB。也就是说，4MB 内，一个驱逐时间段内的全部访问都会被归纳进同一个 episode
 
+<img src="\img\episode definition.png" alt="episode definition" style="zoom: 67%;" />
+
 **episode**是将数据块的访问序列分组为与该块在缓存中的驻留时间相关的访问集合。具体来说：
 
 - 一个episode包含某个数据块从被准入缓存到被驱逐（基于假设的驱逐年龄，eviction age, EA）期间的所有访问（见Figure 4）。
