@@ -311,3 +311,81 @@ Mithril 算法的关键参数及其影响：
 - 频繁变化的工作负载可能需要较小的 `lookahead_range`
 - 访问模式明显的工作负载可以使用较大的 `confidence` 提高容错性
 - 资源受限环境可以降低 `pf_list_size` 减少预取开销
+
+# Mithril 改进
+
+主要针对预取长度做出针对性改进。
+
+---
+
+## Mithril_l
+
+Mithril_l 针对对象大小不等的场景进行了优化。  
+与原始 Mithril 只支持固定大小对象不同，Mithril_l 通过引入 `cache_size_map` 哈希表，记录每个对象的实际大小。在预取时，会根据对象实际大小动态决定需要预取多少个最小单位对象（obj_size），从而实现对变长对象的完整预取。  
+这种机制特别适合文件系统、分布式存储等对象大小不一的应用场景，能够有效提升预取的准确性和缓存利用率。
+
+**关键代码片段：**
+
+```c
+// Mithril_l.c 预取核心
+int num = GPOINTER_TO_INT(g_hash_table_lookup(Mithril_l_params->cache_size_map, GINT_TO_POINTER(new_req->obj_id))) / req->obj_size;
+for (int j = 0; j < num; j++, new_req->obj_id++) {
+    if (cache->find(cache, new_req, false)) continue;
+    while ((long)cache->get_occupied_byte(cache) + new_req->obj_size + cache->obj_md_size > (long)cache->cache_size) {
+        cache->evict(cache, new_req);
+    }
+    cache->insert(cache, new_req);
+}
+```
+**代码分析：**  
+这段代码首先通过 `cache_size_map` 查找当前对象的实际大小，并计算出需要预取的小对象数量 `num`。随后，循环 `num` 次，每次将 `new_req->obj_id` 递增，依次将属于同一大对象的所有小块插入缓存。这样可以确保变长对象被完整预取，提升了缓存的利用率和预取的准确性。
+
+---
+
+## Mithril_adapt
+
+Mithril_adapt 在 Mithril_l 的基础上进一步引入了自适应机制。  
+其核心思想是：根据实际运行时的预取命中率和覆盖率，动态调整每次预取的对象数量（`adapt_length`）。  
+具体做法为：每隔一段时间（`tune_interval`），统计预取命中和未命中情况，若预取效果提升，则增加预取长度（更激进）；若效果变差，则减少预取长度（更保守）。  
+这种自适应调整机制能够根据访问模式的变化自动优化预取策略，兼顾了预取的覆盖率和准确率，适用于访问模式动态变化的复杂场景。
+
+**关键代码片段：**
+
+```c
+// Mithril_adapt.c 预取核心
+int num = Mithril_adapt_params->adapt_length;
+for (int j = 0; j < num; j++, new_req->obj_id++) {
+    if (cache->find(cache, new_req, false)) continue;
+    while ((long)cache->get_occupied_byte(cache) + new_req->obj_size + cache->obj_md_size > (long)cache->cache_size) {
+        cache->evict(cache, new_req);
+    }
+    cache->insert(cache, new_req);
+    Mithril_adapt_params->total_prefetch++;
+}
+```
+**代码分析：**  
+这里的 `adapt_length` 决定了每次预取的对象数量。每次预取时，都会连续插入 `adapt_length` 个对象到缓存中，并统计本次预取的总次数。通过动态调整 `adapt_length`，可以让预取策略根据实际效果自动变得更激进或更保守。
+
+```c
+// Mithril_adapt.c 自适应调整逻辑
+if (cache->n_req % Mithril_adapt_params->tune_interval == 0) {
+    float accuracy_coverage = (float)Mithril_adapt_params->prefetch_hit / Mithril_adapt_params->total_prefetch +
+                              (float)Mithril_adapt_params->prefetch_hit / Mithril_adapt_params->base_miss;
+    if (accuracy_coverage > Mithril_adapt_params->prev_accuracy_coverage) {
+        Mithril_adapt_params->adapt_length += Mithril_adapt_params->delta_length;
+    } else {
+        Mithril_adapt_params->adapt_length -= Mithril_adapt_params->delta_length;
+    }
+    Mithril_adapt_params->adapt_length = MAX(1, MIN(255, Mithril_adapt_params->adapt_length));
+    Mithril_adapt_params->prev_accuracy_coverage = accuracy_coverage;
+    Mithril_adapt_params->prefetch_hit = 0;
+    Mithril_adapt_params->total_prefetch = 0;
+    Mithril_adapt_params->base_miss = 0;
+}
+```
+**代码分析：**  
+这段代码每隔 `tune_interval` 个请求就会触发一次自适应调整。它通过统计预取命中率和覆盖率的加权和（`accuracy_coverage`），与上一个周期的效果进行对比。如果效果提升，则增加预取长度（`adapt_length`），否则减少。`adapt_length` 被限制在合理范围内，防止过大或过小。每次调整后，相关统计量会被清零，进入下一个自适应周期。
+
+---
+通过上述代码和分析可以看出，Mithril_l 解决了变长对象的预取问题，而 Mithril_adapt 则进一步实现了预取激进度的自适应优化，使得预取策略能够根据实际运行效果动态调整，更加智能和高效。
+
