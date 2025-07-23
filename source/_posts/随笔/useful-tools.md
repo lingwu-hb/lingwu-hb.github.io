@@ -174,6 +174,32 @@ git remote add/remove <remote hub name> <remote hub url>
 git push --force origin main:main
 ```
 
+### Tag 相关操作
+
+操作1：从远程仓库拉取所有标签
+
+```bash
+git fetch --tags
+```
+
+操作2：列出本地标签，并附带详细信息
+
+```bash
+git tag -n
+```
+
+操作3：列出远程分支
+
+```bash
+git ls-remote --tags origin
+```
+
+操作4：显示特定标签的特定信息
+
+```bash
+git show <tag-name>
+```
+
 
 
 
