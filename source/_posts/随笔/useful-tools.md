@@ -200,6 +200,12 @@ git ls-remote --tags origin
 git show <tag-name>
 ```
 
+操作5：于标签所在的提交创建一个新分支
+
+```bash
+git checkout -b baseline v1.0
+```
+
 
 
 
