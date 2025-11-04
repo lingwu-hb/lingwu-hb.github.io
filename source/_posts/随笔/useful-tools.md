@@ -227,8 +227,9 @@ git checkout -b baseline v1.0
 
 ## Include 报错
 
-`CTRL + SHIFT + P` 打开 vscode 终端，搜索 JSON，选中 `C/C++: Edit Configurations(JSON)`
-然后在 "includePath" 中增加需要 include 的路径（不同的库文件，路径不相同），对于 glib.h ，可以参考以下格式：
+`CTRL + SHIFT + P` 打开 vscode 终端，搜索 JSON，选中 `C/C++: Edit Configurations(JSON)` 然后在 "includePath" 中增加需要 include 的路径（不同的库文件，路径不相同），可以在命令行使用 `pkg-config --cflags <pkg-name>` 的方式获取对应包的编译路径。
+
+对于 glib.h ，可以参考以下格式：
 
 ```shell
 {
@@ -237,13 +238,6 @@ git checkout -b baseline v1.0
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/c++/9",
-                "/usr/include/x86_64-linux-gnu/c++/9",
-                "/usr/include/c++/9/backward",
-                "/usr/lib/gcc/x86_64-linux-gnu/9/include",
-                "/usr/local/include",
-                "/usr/include/x86_64-linux-gnu",
-                "/usr/include",
                 "/usr/include/glib-2.0",
                 "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
             ],
@@ -258,7 +252,11 @@ git checkout -b baseline v1.0
 }
 ```
 
+:exclamation:注意：
 
+有时候配置文件中会出现一行： `"configurationProvider": "ms-vscode.makefile-tools"`，它告诉 VS Code 的 C/C++ 扩展：**不要用 c_cpp_properties.json 的配置**， 而是去问 **Makefile Tools 扩展**，让它来提供 includePath、defines 等。
+
+因此，把这行删除即可。
 
 ## 云服务器 ssh 断连
 
