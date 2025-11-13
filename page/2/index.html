@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://lingwu-hb.github.io/page/2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
+<meta property="article:author" content="Bo Han">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lingwu-hb.github.io/img/yaojie.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lingwu-hb.github.io/page/2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hexo',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a></span><div id="menus"></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/05/28/paper/thesis-writing-guidance/" title="thesis writing guidance">thesis writing guidance</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-05-28T08:19:19.000Z" title="Created 2025-05-28 16:19:19">2025-05-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/paper/">paper</a></span></div><div class="content">学术规范与论文写作课程 考核形式：结业作业将基于真实英文论文，完成一次“模拟审稿与重写训练” 具体内容：阅读并评估一篇论文；识别其中的问题与亮点；提出批判性意见或修改建议；用你自己的语言重新表达 注意：不考察语言技巧，而看思维能力与判断力；每个人选择的论文不同，允许个性化表达 论文审稿 各部分审稿要点  引言部分：重点审查作者是否清晰介绍了研究背景，引用了足够多的以往工作，并对问题目前的发展水平有概括性介绍；是否明确阐述了本文的研究目的和大致框架。 方法论部分：对于新手来说，提出技术性问题较难，可着重检查作者的推导过程是否有明显错误、公式的格式是否规范等。 实验/仿真部分：关注作者是否清晰写明了实验条件设置，实验对照是否合理，实验结果的图表是否清晰、规范，以及对实验结果的分析是否充分、合理。 总结部分：审查是否对整篇文章进行了反思总结，是否说明了文章做了什么、效果如何、验证了什么，以及未来可以继续补充/深入哪方面的工作。  表达模板 一、对论文整体的概括性表达  “The paper is very well written, and contributes...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/05/27/%E9%9A%8F%E7%AC%94/my-private-recipe/" title="my private recipe">my private recipe</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-05-27T10:42:11.000Z" title="Created 2025-05-27 18:42:11">2025-05-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></span></div><div class="content">肉类 可乐鸡翅  煮鸡翅：锅里放小半锅水，冷水把切好的鸡翅、姜片放入锅里，倒1-2勺料酒，煮3-5分钟，捞出，冲洗干净浮末备用，鸡翅变白熟透即可 炒鸡翅：锅里放油，油热后下姜片、蒜，翻炒炒香后，下煮好的鸡翅翻炒两分钟，然后倒入一勺生抽，一勺老抽，一勺耗油开小火继续翻炒，避免鸡翅糊锅底。 倒可乐：倒入可乐，开大火煮开，不断翻炒，防止糊底 可乐煮开之后，转小火，然后稍微加点盐调一下味，下火煮10-15分钟，煮的过程中要不断翻炒，最后开大火收汁，并撒上白芝麻即可  面类 🍜 火鸡面 🥄 做法  煮面：将水烧开至没过面饼，放入火鸡面饼。 加料：面饼稍软后，加入2/3料包（太多会辣 🌶️）。 收汁：面饼煮软后，转小火收汁至合适口感。   🌯 烤冷面 （食谱待补充，敬请期待！）  🍲 清汤面 🥚 原料 食材：  挂面（约一元硬币直径粗细） 鸡蛋（1个） 火腿肠（可选）  调料：  生抽（3勺） 陈醋（1勺） 盐（少许） 香油（1勺） 香葱（适量）  🥄 做法  煎鸡蛋...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/05/16/AICache/Decision-Tree-Addmission-Policy/" title="Decision Tree Addmission Policy">Decision Tree Addmission Policy</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-05-16T08:06:20.000Z" title="Created 2025-05-16 16:06:20">2025-05-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/AI/">AI</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">   OTAE: Decision Tree Based Cache Admission Policy 📋 Overview 项目地址 OTAE (Optimized Tree-based Admission Engine) is an intelligent cache admission policy that uses decision trees to predict whether a cache block should be admitted to the cache. It aims to improve cache efficiency by learning from historical access patterns and making smart admission decisions. 🗂️ Project Structure 12345678910111213141516171819otae/├── feature/                   # Feature extraction│   ├──...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/04/02/algo/algorithm-notebook/" title="algorithm notebook">algorithm notebook</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-04-02T09:19:19.000Z" title="Created 2025-04-02 17:19:19">2025-04-02</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Leetcode/">Leetcode</a></span></div><div class="content">算法笔记 数据结构类 tip string 类常用方法 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include &lt;iostream&gt;#include &lt;string&gt;using namespace std;int main()&#123;    //字符数组转字符串    char a[100];    string s5(a);    cout&lt;&lt;s5&lt;&lt;endl; //输出World!    //8、字符串的子串    s1 = &quot;hello World!&quot;;    s2 = s1.substr(2,5);    cout&lt;&lt;s2&lt;&lt;endl; //输出 llo W 从下标2开始 截取5个字符    s2 = s1.substr(3);    cout&lt;&lt;s2&lt;&lt;endl; //输出 llo W 从下标3开始...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/24/AICache/ocf-lock-analysis/" title="ocf lock analysis">ocf lock analysis</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-24T03:28:05.000Z" title="Created 2025-03-24 11:28:05">2025-03-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">锁机制分析 OCF 中设计了多种多样的锁来进行并发控制。最常见的为元数据锁和缓存行锁。 元数据锁 缓存相关的元数据，包括缓存映射信息、缓存哈希表数据以及缓存状态信息等。 123456// 获取元数据的读锁，后续读取元数据信息ocf_hb_req_prot_lock_rd(req);ocf_hb_req_prot_unlock_rd(req);// 锁升级，先释放掉所有的读锁，然后再拿去写锁。顺序拿取，防止死锁ocf_hb_req_prot_lock_upgrade(req);ocf_hb_req_prot_unlock_wr(req); 缓存行锁 缓存行锁针对的粒度为缓存行，并且使用了分级获取的方式 首先尝试快速获取锁，如果快速获取锁失败，再慢速获取锁。 快速获取是同步进行获取，不会阻塞，一旦有一个缓存行获取失败，直接退出。 慢速获取会尝试获取每一个锁，如果获取不到，将会考虑将其放置到等待队列，直到成功获取锁才执行回调函数。（代码片段如下） 1234567891011int ocf_alock_lock_rd(struct ocf_alock *alock,		struct...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/18/AICache/%E4%BA%8C%E6%AC%A1%E5%87%86%E5%85%A5IO%E8%BF%87%E6%BB%A4%E7%AE%97%E6%B3%95/" title="二次准入IO过滤算法">二次准入IO过滤算法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-18T08:51:39.000Z" title="Created 2025-03-18 16:51:39">2025-03-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">问题 改为 4K 后，通过火焰图分析，发现历史哈希表的插入和查找过程非常耗时，分别为整个系统用时的 19.3% 和 34.11%。 打印出哈希表的状态发现，哈希表中冲突链的个数过多。 初步分析，因为是因为初始的时候哈希表的长度过小，并且 IO 涉及的 4K 块访问地址跨度过大，导致此问题发生。 改进想法  增加哈希表初始化的大小 限制冲突链表的长度值  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/02/23/system/C%E8%AF%AD%E8%A8%80%E5%AE%8F%E5%AE%9A%E4%B9%89%E9%80%9A%E8%BF%87%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E8%8E%B7%E5%8F%96%E7%B1%BB%E6%8C%87%E9%92%88%E6%9C%80%E4%BC%98%E8%A7%A3/" title="C语言宏定义通过成员变量获取类指针最优解">C语言宏定义通过成员变量获取类指针最优解</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-02-23T15:16:25.000Z" title="Created 2025-02-23 23:16:25">2025-02-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/system/">system</a></span></div><div class="content">问题简介 最近在看开源 OCF 源码的时候，发现了一个 C 语言宏定义的常见使用技巧。从初见的不解，到了解之后的惊叹，不得不感叹于底层开发人员关于性能的极致追求！ 在编程开发中，经常需要进行变量之间的类型转换操作。一个类 A 中存在类型为B 的成员变量。假设现在我拥有一个类型为 B 的变量 v1，我需要得到一个类型为 A 的变量 v2，同时 v2-&gt;B 就为变量 v1。 方法一 一般来说，对于此类问题，熟悉 C++ 的初学者会考虑采用以下的方法实现： 12345678910111213141516// 用宏定义实现此功能！#define CONVERT_B_TO_A(v1) A(v1)class B &#123;    // B 类的定义&#125;;class A &#123;public:    B b;    A(const B&amp; b_val) : b(b_val) &#123;&#125;&#125;;int main() &#123;    B v1;    A v2 = CONVERT_B_TO_A(v1);  // 使用宏进行转换    return...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/02/03/AICache/Ceph%E9%83%A8%E7%BD%B2/" title="Ceph部署">Ceph部署</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-02-03T07:19:33.000Z" title="Created 2025-02-03 15:19:33">2025-02-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">Ceph Monitor职责  维护集群状态图（Cluster Map），Cluster Map为全局的元数据，包括以下信息:   OSD Map	记录所有 OSD 节点的状态（如在线/离线）、存储容量、数据分布规则（CRUSH 算法配置）。 MON Map	记录 Monitor 节点自身的列表和地址。 PG Map	管理 Placement Group（PG）的映射关系（PG 是数据分片逻辑单元）。 MDS Map（仅当使用 CephFS 时）	记录 Metadata Server 的状态。    管理集群的 Paxos 共识，确保Cluster Map的强一致性。   处理客户端请求 客户端（如 RBD、RGW、CephFS）首次连接集群时，会从 Monitor 获取最新的 Cluster Map，用于确定数据的读写位置（如 OSD 地址）。客户端后续操作直接与 OSD 通信，无需持续依赖 Monitor（除非 Cluster Map 更新）。   监控集群健康状态   管理身份认证与权限   协调 PG 状态变更   处理配置变更 1ceph-deploy mon...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/10/27/%E9%9A%8F%E7%AC%94/%E8%8B%8F%E5%B7%9E%E6%B8%B8%E8%AE%B0/" title="苏州游记">苏州游记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-27T01:14:23.000Z" title="Created 2024-10-27 09:14:23">2024-10-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></span></div><div class="content">Day01  山塘街：老阊门饭馆  老阊门饭点，吃了松鼠桂鱼和河中三白，非常不错的苏帮菜。 居民区商业街，只有一个桥上的拍照点（如下图所示） 山塘街很有小桥流水的感觉，总体上感觉是比较复古的商业街。  Day02  拙政园 -&gt; 吴越荣记 -&gt; 苏州博物馆 -&gt; 平江路  拙政园 人很多，排队很严重。但是园林很好逛，能体验到皇帝平日的悠闲。拙政园云集了各大园林的特色，处处都是被进行设计过的。园子随便一个角落就是一处绝美的出片点，每一个窗帘都形状各异，颇具大气与典雅。 苏州博物馆 看到了镇馆之宝莲花碗，非常精美。还看到了金龙。院子里面的”猪“锦鲤胖胖的，臃肿得都不太容易游动。 平江路 就是一个水乡古镇里面的商业街，能体验了历史的样貌，沿小河两岸。 步数接近两万步，晚上脚底板难受 😫 ，提前回到酒店点了麦当劳和甜星 star（苏州版好利来)。 Day03  狮子林 -&gt; 苏外婆私房菜 -&gt;...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/10/22/paper/Conference-message/" title="Conference message">Conference message</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-10-22T14:39:39.000Z" title="Created 2024-10-22 22:39:39">2024-10-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/paper/">paper</a></span></div><div class="content"> 存储相关会议信息整理（转载自其他博客）  存储领域主要顶级会议： FAST(Conference on File and Storage Technologies)：CCF A类 USENIX New sitez: Upcoming USENIX Conferences | USENIX MSST(Mass Storage Systems and Technologies)：CCF B类 IEEE MSST Conference USENIX ATC(USENIX Annul Technical Conference)：CCF A类 USENIX USENIX ATC | USENIX MASCOTS(IEEE International Symposium on Modeling, Analysis, and Simulation of Computer and Telecommunication Systems)：CCF C类...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#content-inner">3</a><a class="page-number" href="/page/4/#content-inner">4</a><a class="extend next" rel="next" href="/page/3/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/09/AICache/thirdStage/Mithril-intro/" title="Mithril intro">Mithril intro</a><time datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey">RL paper survey</a><time datetime="2025-07-04T02:03:02.000Z" title="Created 2025-07-04 10:03:02">2025-07-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/"><span class="card-category-list-name">AI</span><span class="card-category-list-count">8</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Leetcode/"><span class="card-category-list-name">Leetcode</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/data-storage/"><span class="card-category-list-name">data storage</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/paper/"><span class="card-category-list-name">paper</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/system/"><span class="card-category-list-name">system</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%A1%A5%E5%85%85%E7%B1%BB%E6%96%87%E4%BB%B6/"><span class="card-category-list-name">补充类文件</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/"><span class="card-category-list-name">随笔</span><span class="card-category-list-count">3</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/%E5%AE%8F%E5%AE%9A%E4%B9%89/" style="font-size: 1.1em; color: #999">宏定义</a> <a href="/tags/c%E8%AF%AD%E8%A8%80/" style="font-size: 1.1em; color: #999">c语言</a> <a href="/tags/OS-Lab/" style="font-size: 1.1em; color: #999">OS Lab</a> <a href="/tags/prefetch-algo/" style="font-size: 1.1em; color: #999">prefetch algo</a> <a href="/tags/%E8%AE%BA%E6%96%87%E6%8C%87%E5%AF%BC%E6%9D%90%E6%96%99/" style="font-size: 1.23em; color: #999ea6">论文指导材料</a> <a href="/tags/PPO/" style="font-size: 1.1em; color: #999">PPO</a> <a href="/tags/RL/" style="font-size: 1.1em; color: #999">RL</a> <a href="/tags/Consistent-Hash/" style="font-size: 1.1em; color: #999">Consistent Hash</a> <a href="/tags/%E4%BA%8C%E6%AC%A1%E5%87%86%E5%85%A5/" style="font-size: 1.1em; color: #999">二次准入</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/" style="font-size: 1.1em; color: #999">学习规划</a> <a href="/tags/%E5%AE%9E%E4%B9%A0%E9%A1%B9%E7%9B%AE/" style="font-size: 1.5em; color: #99a9bf">实习项目</a> <a href="/tags/%E9%A3%9F%E8%B0%B1/" style="font-size: 1.1em; color: #999">食谱</a> <a href="/tags/diffusion-model/" style="font-size: 1.1em; color: #999">diffusion model</a> <a href="/tags/algorithm/" style="font-size: 1.23em; color: #999ea6">algorithm</a> <a href="/tags/cache-prefetcher/" style="font-size: 1.1em; color: #999">cache prefetcher</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/" style="font-size: 1.1em; color: #999">模型量化</a> <a href="/tags/useful-tools/" style="font-size: 1.1em; color: #999">useful tools</a> <a href="/tags/information/" style="font-size: 1.1em; color: #999">information</a> <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91%E5%87%86%E5%85%A5/" style="font-size: 1.1em; color: #999">决策树准入</a> <a href="/tags/continual-learning/" style="font-size: 1.1em; color: #999">continual learning</a> <a href="/tags/Attention/" style="font-size: 1.1em; color: #999">Attention</a> <a href="/tags/lock/" style="font-size: 1.1em; color: #999">lock</a> <a href="/tags/%E6%B8%B8%E8%AE%B0/" style="font-size: 1.1em; color: #999">游记</a> <a href="/tags/DQN/" style="font-size: 1.1em; color: #999">DQN</a> <a href="/tags/ceph/" style="font-size: 1.1em; color: #999">ceph</a> <a href="/tags/similarity-hash/" style="font-size: 1.1em; color: #999">similarity hash</a> <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" style="font-size: 1.1em; color: #999">强化学习</a> <a href="/tags/spdk/" style="font-size: 1.1em; color: #999">spdk</a> <a href="/tags/ocf/" style="font-size: 1.37em; color: #99a4b2">ocf</a> <a href="/tags/cache-placement-survey/" style="font-size: 1.1em; color: #999">cache placement survey</a> <a href="/tags/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/" style="font-size: 1.1em; color: #999">开题相关</a> <a href="/tags/%E8%87%AA%E5%BE%8B/" style="font-size: 1.1em; color: #999">自律</a> <a href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92%E7%B1%BB/" style="font-size: 1.1em; color: #999">人生规划类</a> <a href="/tags/mamba-model/" style="font-size: 1.1em; color: #999">mamba model</a> <a href="/tags/prefetch/" style="font-size: 1.1em; color: #999">prefetch</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>Archives</span>
+      <a class="card-more-btn" href="/archives/"
+            title="View More">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              July 2025
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/06/">
+            <span class="card-archive-list-date">
+              June 2025
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              May 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/04/">
+            <span class="card-archive-list-date">
+              April 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              March 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/02/">
+            <span class="card-archive-list-date">
+              February 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              October 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/08/">
+            <span class="card-archive-list-date">
+              August 2024
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">33</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-11-13T07:49:30.964Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

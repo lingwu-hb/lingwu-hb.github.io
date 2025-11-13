@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://lingwu-hb.github.io/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
+<meta property="article:author" content="Bo Han">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lingwu-hb.github.io/img/yaojie.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lingwu-hb.github.io/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hexo',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a></span><div id="menus"></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/09/AICache/thirdStage/Mithril-intro/" title="Mithril intro">Mithril intro</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">Mithril 算法数据结构 rec_mining_t 数据结构 rec_mining_t 是 Mithril 算法中用于记录和挖掘访问模式的核心数据结构，它包含以下关键组件： 主要组件    组件 类型 描述     hashtable GHashTable* 哈希表，存储块相关信息。键为块号，值为行号（指向记录表或挖掘表）。- 正值：指向记录表- 负值：指向挖掘表   recording_table gint64* 记录表，结构为 N*(min_support/4+1) 数组。- 其中 4 是一个 64 位整数中存储的时间戳数量- N 是记录表中的条目数- 加 1 是为了标签   rtable_row_len gint8 记录表的行长度，当前为 min_support/4 + 1   n_rows_in_rtable gint64 记录表中的行数，决定记录表可以存储多少块   rtable_cur_row gint64 记录表中的当前行号   mtable_row_len gint8 挖掘表的行长度，当前为 max_support/4 +...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey">RL paper survey</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-07-04T02:03:02.000Z" title="Created 2025-07-04 10:03:02">2025-07-04</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/paper/">paper</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">1. ArtMem ArtMem：Adaptive Migration in Reinforcement Learning-Enabled Tiered Memory 背景： 内存系统只靠 DRAM 不足，因此引入 PM 和基于 CXL 的额外内存，形成快慢速的分层内存系统。 但现有分层内存系统中的页面迁移策略不够...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/AI/">AI</a></span></div><div class="content">第三阶段需要在 ocf 中实现的预取器有以下几个关键点：  预取出来的 IO 会如何进行处理？会不会和原 IO 串行处理，从而影响原 IO？  空间上会抢占 cache 的空间；时间上，若生成预取 IO 的速度太慢，将会影响下一个原 IO 的处理速度。  该预取器集成了时间和空间预取器？分别而言，时间和空间预取器各自是如何展开工作的呢？  详见下文 Mithril 和 OBL tsPrefetchus 预取器 概述 tsPrefetchus 是一个混合预取器，它结合了两种不同类型的预取策略：  顺序预取器（sequential prefetcher）：如** OBL**, AMP, Leap 等 历史预取器（history prefetcher）：如 Mithril, PG 等  这个预取器的核心思想是动态调整这两种预取策略的权重，以适应不同的访问模式。 工作原理 混合预取策略 tsPrefetchus...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">说明 本文主要分析 ocf 和 tsprefetchus 中的 cache 和 request 数据差异 代码地址： ocf：https://github.com/lingwu-hb/ModifiedOCF tsprefetchus：https://github.com/lingwu-hb/libCacheSim cache ocf 123456struct ocf_cache &#123;    struct ocf_cache_device* device;	// &lt;1&gt; 管理物理存储部分    struct ocf_metadata metadata;		// &lt;2&gt; 缓存元数据管理    struct list_head io_queues;			// &lt;3&gt; 用于特定缓存内的IO队列管理，支持多队列IO处理机制    // ...&#125;; 123456789101112131415161718192021222324struct ocf_cache_device &#123;    struct ocf_volume...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">文档 本文档主要用于梳理 spdk 相关概念和代码 简单理解就是： spdk 让应用程序可以直接访问到底层的存储介质，避免了繁琐的中断操作，从而提升了存储效率（不太确定） ocf 作为缓存管理框架，用于管理多级缓存的存储工作，能够封装底层的多级缓存，提供更加快速的缓存读写操作和多种读写策略。  ❗ 以下内容由 cursor 生成，仅供参考 ❗  spdk 与 ocf 之间的桥梁 module/bdev/ocf 文件夹是连接 SPDK 和 OCF 的桥梁，它实现了一个 SPDK 块设备（bdev）模块，让 OCF 缓存功能能够在 SPDK 框架中使用。 主要文件及其功能  vbdev_ocf.c/h：    实现了虚拟块设备（Virtual Block Device）的核心功能   定义了 OCF 缓存设备在 SPDK 中的表示和行为   处理设备的注册、初始化和销毁   管理 I/O 操作的提交和完成    vbdev_ocf_rpc.c：    实现了 RPC（远程过程调用）接口   允许用户通过 SPDK 的 RPC 机制创建、配置和管理 OCF 缓存设备   提供了如...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/06/29/%E5%BC%80%E9%A2%98/%E5%89%8D%E6%9C%9F%E8%B0%83%E7%A0%94/" title="前期调研">前期调研</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-06-29T05:00:30.000Z" title="Created 2025-06-29 13:00:30">2025-06-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/AI/">AI</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">确定大的研究方向 主要背景图如下所示：  具体时间节点 三个月时间 确定题目：一个半月 文献调研 + 材料整理：一个半月 目前工作重点  确定访问模式，最好能根据 cacheus 的方法进行实验验证  开展实验的话，是否需要租用 GPU？了解一下 cacheus 分析访问模式的方法，用于参考学习  相关文献调研，判断业界目前采用何种方式进行预取？  主要需要和传统块存储进行对比，大概率大模型 prefill 和 inference 阶段有其独特的访问模式！ 主要方向：KV Cache 缓存管理加速推理速度方向，不限定为一定要预取！ 后面阅读文章的时候需要重点关注：文章的问题总结出来，文章主要解决哪些问题，还有哪些没有解决的问题，从问题中发现创新点。 ‼️‼️‼️ 当前需要工作内容  阅读 《3.3　智能显存分配与预取》中提及的相关论文，然后提取相关内容到重点论文分析中。  开题思路 相关问题   实验室大方向是什么？能不能搞 LLM 推理加速   实验室有哪些人在搞大模型方向，具体是哪个方向   LLM 背景知识不足，开题的题目不太能想出 idea   LLM KV Cache...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/" title="tsPrefetcher 调研">tsPrefetcher 调研</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-06-29T04:55:08.000Z" title="Created 2025-06-29 12:55:08">2025-06-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">有以下几个关键点：  预取出来的 IO 会如何进行处理？会不会和原 IO 串行处理，从而影响原 IO？  空间上会抢占 cache 的空间；时间上，若生成预取 IO 的速度太慢，将会影响下一个原 IO 的处理速度。  该预取器集成了时间和空间预取器？分别而言，时间和空间预取器各自是如何展开工作的呢？  详见下文 Mithril 和 OBL tsPrefetchus 预取器 概述 tsPrefetchus 是一个混合预取器，它结合了两种不同类型的预取策略：  顺序预取器（sequential prefetcher）：如 OBL, AMP, Leap 等 历史预取器（history prefetcher）：如 Mithril, PG 等  这个预取器的核心思想是动态调整这两种预取策略的权重，以适应不同的访问模式。 工作原理 混合预取策略 tsPrefetchus...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/06/29/AICache/%E4%B8%80%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%9D%90%E6%96%99%E6%B1%87%E6%80%BB/" title="一二阶段材料汇总">一二阶段材料汇总</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-06-29T04:50:19.000Z" title="Created 2025-06-29 12:50:19">2025-06-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/data-storage/">data storage</a></span></div><div class="content">一阶段 在 ocf 中实现二次准入策略。 动机 trace 中存在大量只会访问一次的请求，用二次准入过滤掉这些请求，防止其污染缓存空间。 技术点 将每个请求划分成若干个 4K 块，然后对每个 4K 块进行哈希处理，判断该 4K 块之前是否出现过。如果某个请求中，之前出现过的 4K 块的数量超过阈值，则该请求准入；否则，该请求不予准入。 核心代码 12345678910111213141516171819202122232425bool ocf_history_check_second_chance(uint64_t addr, uint64_t size) &#123;    // 计算页面对齐的地址    uint64_t start_addr = PAGE_ALIGN_DOWN(addr);    uint64_t end_addr = PAGE_ALIGN_DOWN(addr + size - 1);    uint64_t total_pages = PAGES_IN_REQ(start_addr, end_addr);    uint64_t hit_pages =...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/06/11/%E9%9A%8F%E7%AC%94/useful-tools/" title="useful tools">useful tools</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-06-11T03:18:27.000Z" title="Created 2025-06-11 11:18:27">2025-06-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></span></div><div class="content">常用工具 配置 zsh &amp;&amp; oh-my-zsh  ZSH（Z-Shell）是一种功能强大的 Unix shell，提供了许多增强功能，如高级脚本能力、自动补全和主题支持。  sudo apt install zsh  Oh-My-Zsh 是一个用于管理 ZSH 配置的流行框架，提供了丰富的主题和插件。使用以下命令安装  sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;  插件安装  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;/plugins/zsh-syntax-highlighting git clone https://github.com/zsh-users/zsh-autosuggestions...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/06/06/algo/attention-mechanism/" title="attention mechanism">attention mechanism</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-06-06T02:05:14.000Z" title="Created 2025-06-06 10:05:14">2025-06-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/AI/">AI</a></span></div><div class="content">Transformer 的向量化与 Attention 机制解析 参考视频 向量化（Embedding） 向量化是将输入文本中的单词或子词（Token）转化为高维向量（Embedding）的过程。每个 Token 会被映射到一个高维空间中的向量，用于表示其语义信息。 在 Transformer 的原始论文中，Embedding 的维度通常设为 512： $$ dim_emb = 512 $$  初始 Embedding：相同的 Token（例如同一个单词）会被赋予相同的初始 Embedding 向量。 上下文调整：由于同一个单词在不同句子或同一句子的不同位置可能具有不同含义，Transformer 通过后续的 Attention 机制和位置编码（Positional Encoding）调整每个 Token 的 Embedding，使其不仅表示单词本身，还能捕捉丰富的上下文信息。  直观理解：你可以将 Embedding 想象成一个高维空间中的“坐标点”，每个 Token 是一个点，而 Transformer...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/#content-inner">4</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/09/AICache/thirdStage/Mithril-intro/" title="Mithril intro">Mithril intro</a><time datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey">RL paper survey</a><time datetime="2025-07-04T02:03:02.000Z" title="Created 2025-07-04 10:03:02">2025-07-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/"><span class="card-category-list-name">AI</span><span class="card-category-list-count">8</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Leetcode/"><span class="card-category-list-name">Leetcode</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/data-storage/"><span class="card-category-list-name">data storage</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/paper/"><span class="card-category-list-name">paper</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/system/"><span class="card-category-list-name">system</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%A1%A5%E5%85%85%E7%B1%BB%E6%96%87%E4%BB%B6/"><span class="card-category-list-name">补充类文件</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/"><span class="card-category-list-name">随笔</span><span class="card-category-list-count">3</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/%E5%AE%8F%E5%AE%9A%E4%B9%89/" style="font-size: 1.1em; color: #999">宏定义</a> <a href="/tags/c%E8%AF%AD%E8%A8%80/" style="font-size: 1.1em; color: #999">c语言</a> <a href="/tags/OS-Lab/" style="font-size: 1.1em; color: #999">OS Lab</a> <a href="/tags/prefetch-algo/" style="font-size: 1.1em; color: #999">prefetch algo</a> <a href="/tags/%E8%AE%BA%E6%96%87%E6%8C%87%E5%AF%BC%E6%9D%90%E6%96%99/" style="font-size: 1.23em; color: #999ea6">论文指导材料</a> <a href="/tags/PPO/" style="font-size: 1.1em; color: #999">PPO</a> <a href="/tags/RL/" style="font-size: 1.1em; color: #999">RL</a> <a href="/tags/Consistent-Hash/" style="font-size: 1.1em; color: #999">Consistent Hash</a> <a href="/tags/%E4%BA%8C%E6%AC%A1%E5%87%86%E5%85%A5/" style="font-size: 1.1em; color: #999">二次准入</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E8%A7%84%E5%88%92/" style="font-size: 1.1em; color: #999">学习规划</a> <a href="/tags/%E5%AE%9E%E4%B9%A0%E9%A1%B9%E7%9B%AE/" style="font-size: 1.5em; color: #99a9bf">实习项目</a> <a href="/tags/%E9%A3%9F%E8%B0%B1/" style="font-size: 1.1em; color: #999">食谱</a> <a href="/tags/diffusion-model/" style="font-size: 1.1em; color: #999">diffusion model</a> <a href="/tags/algorithm/" style="font-size: 1.23em; color: #999ea6">algorithm</a> <a href="/tags/cache-prefetcher/" style="font-size: 1.1em; color: #999">cache prefetcher</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96/" style="font-size: 1.1em; color: #999">模型量化</a> <a href="/tags/useful-tools/" style="font-size: 1.1em; color: #999">useful tools</a> <a href="/tags/information/" style="font-size: 1.1em; color: #999">information</a> <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91%E5%87%86%E5%85%A5/" style="font-size: 1.1em; color: #999">决策树准入</a> <a href="/tags/continual-learning/" style="font-size: 1.1em; color: #999">continual learning</a> <a href="/tags/Attention/" style="font-size: 1.1em; color: #999">Attention</a> <a href="/tags/lock/" style="font-size: 1.1em; color: #999">lock</a> <a href="/tags/%E6%B8%B8%E8%AE%B0/" style="font-size: 1.1em; color: #999">游记</a> <a href="/tags/DQN/" style="font-size: 1.1em; color: #999">DQN</a> <a href="/tags/ceph/" style="font-size: 1.1em; color: #999">ceph</a> <a href="/tags/similarity-hash/" style="font-size: 1.1em; color: #999">similarity hash</a> <a href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/" style="font-size: 1.1em; color: #999">强化学习</a> <a href="/tags/spdk/" style="font-size: 1.1em; color: #999">spdk</a> <a href="/tags/ocf/" style="font-size: 1.37em; color: #99a4b2">ocf</a> <a href="/tags/cache-placement-survey/" style="font-size: 1.1em; color: #999">cache placement survey</a> <a href="/tags/%E5%BC%80%E9%A2%98%E7%9B%B8%E5%85%B3/" style="font-size: 1.1em; color: #999">开题相关</a> <a href="/tags/%E8%87%AA%E5%BE%8B/" style="font-size: 1.1em; color: #999">自律</a> <a href="/tags/%E4%BA%BA%E7%94%9F%E8%A7%84%E5%88%92%E7%B1%BB/" style="font-size: 1.1em; color: #999">人生规划类</a> <a href="/tags/mamba-model/" style="font-size: 1.1em; color: #999">mamba model</a> <a href="/tags/prefetch/" style="font-size: 1.1em; color: #999">prefetch</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>Archives</span>
+      <a class="card-more-btn" href="/archives/"
+            title="View More">
+            <i class="fas fa-angle-right"></i>
+          </a>
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/07/">
+            <span class="card-archive-list-date">
+              July 2025
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/06/">
+            <span class="card-archive-list-date">
+              June 2025
+            </span>
+            <span class="card-archive-list-count">5</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              May 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/04/">
+            <span class="card-archive-list-date">
+              April 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              March 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/02/">
+            <span class="card-archive-list-date">
+              February 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/10/">
+            <span class="card-archive-list-date">
+              October 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/08/">
+            <span class="card-archive-list-date">
+              August 2024
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">33</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-11-13T07:49:30.964Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

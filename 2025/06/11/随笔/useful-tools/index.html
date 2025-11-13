@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>useful tools | Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="常用工具 配置 zsh &amp;&amp; oh-my-zsh  ZSH（Z-Shell）是一种功能强大的 Unix shell，提供了许多增强功能，如高级脚本能力、自动补全和主题支持。  sudo apt install zsh  Oh-My-Zsh 是一个用于管理 ZSH 配置的流行框架，提供了丰富的主题和插件。使用以下命令安装  sh -c &quot;$(curl -fsSL https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="useful tools">
+<meta property="og:url" content="https://lingwu-hb.github.io/2025/06/11/%E9%9A%8F%E7%AC%94/useful-tools/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="常用工具 配置 zsh &amp;&amp; oh-my-zsh  ZSH（Z-Shell）是一种功能强大的 Unix shell，提供了许多增强功能，如高级脚本能力、自动补全和主题支持。  sudo apt install zsh  Oh-My-Zsh 是一个用于管理 ZSH 配置的流行框架，提供了丰富的主题和插件。使用以下命令安装  sh -c &quot;$(curl -fsSL https">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
+<meta property="article:published_time" content="2025-06-11T03:18:27.000Z">
+<meta property="article:modified_time" content="2025-11-04T11:57:45.348Z">
+<meta property="article:author" content="Bo Han">
+<meta property="article:tag" content="useful tools">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lingwu-hb.github.io/img/yaojie.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "useful tools",
+  "url": "https://lingwu-hb.github.io/2025/06/11/%E9%9A%8F%E7%AC%94/useful-tools/",
+  "image": "https://lingwu-hb.github.io/img/yaojie.jpg",
+  "datePublished": "2025-06-11T03:18:27.000Z",
+  "dateModified": "2025-11-04T11:57:45.348Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Bo Han",
+      "url": "https://lingwu-hb.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lingwu-hb.github.io/2025/06/11/%E9%9A%8F%E7%AC%94/useful-tools/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'useful tools',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">useful tools</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">useful tools</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-06-11T03:18:27.000Z" title="Created 2025-06-11 11:18:27">2025-06-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-04T11:57:45.348Z" title="Updated 2025-11-04 19:57:45">2025-11-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="常用工具">常用工具</h1>
+<h2 id="配置-zsh-oh-my-zsh">配置 zsh &amp;&amp; oh-my-zsh</h2>
+<ol>
+<li>ZSH（Z-Shell）是一种功能强大的 Unix shell，提供了许多增强功能，如高级脚本能力、自动补全和主题支持。</li>
+</ol>
+<p><code>sudo apt install zsh</code></p>
+<ol start="2">
+<li>Oh-My-Zsh 是一个用于管理 ZSH 配置的流行框架，提供了丰富的主题和插件。使用以下命令安装</li>
+</ol>
+<p><code>sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)&quot;</code></p>
+<ol start="3">
+<li>插件安装</li>
+</ol>
+<p><code>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;/plugins/zsh-syntax-highlighting</code></p>
+<p><code>git clone https://github.com/zsh-users/zsh-autosuggestions $&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;/plugins/zsh-autosuggestions</code></p>
+<ol start="4">
+<li>插件启动，修改 ~/.zshrc 配置文件</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">plugins=(git</span><br><span class="line">        zsh-autosuggestions</span><br><span class="line">        zsh-syntax-highlighting</span><br><span class="line">        pip</span><br><span class="line">        sudo</span><br><span class="line">        last-working-dir</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<h2 id="安装-conda">安装 conda</h2>
+<p>conda 是包和环境管理工具，能够很方便得拿到特定的环境，实现环境隔离。</p>
+<p>安装流程如下：</p>
+<ol>
+<li>Wget 下载</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://mirrors.bfsu.edu.cn/anaconda/archive/Anaconda3-2022.10-Linux-x86_64.sh --no-check-certificate</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>❗ ❗ ❗  如果出现报错信息：ERROR 403: Forbidden，需要加上 --user-agent=“Mozilla”</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget --user-agent=<span class="string">&quot;Mozilla&quot;</span> https://mirrors.bfsu.edu.cn/anaconda/archive/Anaconda3-2022.10-Linux-x86_</span><br><span class="line">64.sh --no-check-certificate</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>执行安装脚本</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash Anaconda3-2021.11-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>写入配置文件</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export PATH=&quot;/home/ubuntu/anaconda3/bin:$PATH&quot;&#x27;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>❗❗❗ 注意这里需要明确的路径，而不是 <code>~/anaconda3/bin:$PATH</code></p>
+</blockquote>
+<ol start="4">
+<li>执行 conda init [shell_name] 进行初始化</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda init zsh</span><br></pre></td></tr></table></figure>
+<p>conda 自带的脚本会执行一系列操作，完成初始配置。</p>
+<h2 id="文件上传与下载">文件上传与下载</h2>
+<p>1、从服务器上下载文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp username@servername:/path/filename /var/www/local_dir（本地目录）</span><br></pre></td></tr></table></figure>
+<p>例如scp <a href="mailto:root@192.168.0.101">root@192.168.0.101</a>:/var/www/test.txt  把192.168.0.101上的/var/www/test.txt 的文件下载到/var/www/local_dir（本地目录）</p>
+<p>2、上传本地文件到服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp /path/filename username@servername:/path   </span><br></pre></td></tr></table></figure>
+<p>例如scp /var/www/test.php  <a href="mailto:root@192.168.0.101">root@192.168.0.101</a>:/var/www/  把本机/var/www/目录下的test.php文件上传到192.168.0.101这台服务器上的/var/www/目录中</p>
+<p>3、从服务器下载整个目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r username@servername:/var/www/remote_dir/（远程目录） /var/www/local_dir（本地目录）</span><br></pre></td></tr></table></figure>
+<p>例如:scp -r <a href="mailto:root@192.168.0.101">root@192.168.0.101</a>:/var/www/test  /var/www/</p>
+<p>4、上传目录到服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp  -r local_dir username@servername:remote_dir</span><br></pre></td></tr></table></figure>
+<p>例如：scp -r test  <a href="mailto:root@192.168.0.101">root@192.168.0.101</a>:/var/www/   把当前目录下的test目录上传到服务器的/var/www/ 目录</p>
+<h2 id="Git-常用命令">Git 常用命令</h2>
+<h3 id="分支相关">分支相关</h3>
+<p>操作1：本地新建一个分支，并跟踪远端的分支，然后切换到该分支。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b [new_branch] origin/[new_branch]</span><br></pre></td></tr></table></figure>
+<p>操作2：先拉取远端分支信息，然后检查当前分支相对于远端分支的具体情况。可用于判断本地分支是否落后于远端分支。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch; git status</span><br></pre></td></tr></table></figure>
+<p>操作3：给当前分支修改名称</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -M &lt;new_branch_name&gt;</span><br></pre></td></tr></table></figure>
+<p>操作4：git commit 后，再修改 .gitignore 文件，让 .gitignore 文件生效。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">rm</span> -r --cached &lt;file-or-directory&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>file-or-directory</code> 是你不想要继续跟踪的文件或目录路径。</li>
+<li><code>--cached</code> 确保文件只从 <code>Git</code> 的索引中移除，本地文件不会被删除。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit --amend --no-edit</span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行 <code>git rm -r --cached</code> 后，运行此命令会更新最近的提交，去掉不想要的文件。</li>
+<li><code>--no-edit</code> 表示保留原提交信息，不需要修改。</li>
+</ul>
+<p>然后再进行后续的提交操作即可。</p>
+<h3 id="远端仓库相关">远端仓库相关</h3>
+<p>操作1：添加/删除远程仓库关联到本地仓库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add/remove &lt;remote hub name&gt; &lt;remote hub url&gt;</span><br></pre></td></tr></table></figure>
+<p>操作2：强制将本地仓库内容覆盖到远端仓库</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push --force origin main:main</span><br></pre></td></tr></table></figure>
+<h3 id="Tag-相关操作">Tag 相关操作</h3>
+<p>操作1：从远程仓库拉取所有标签</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch --tags</span><br></pre></td></tr></table></figure>
+<p>操作2：列出本地标签，并附带详细信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -n</span><br></pre></td></tr></table></figure>
+<p>操作3：列出远程分支</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-remote --tags origin</span><br></pre></td></tr></table></figure>
+<p>操作4：显示特定标签的特定信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git show &lt;tag-name&gt;</span><br></pre></td></tr></table></figure>
+<p>操作5：于标签所在的提交创建一个新分支</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b baseline v1.0</span><br></pre></td></tr></table></figure>
+<h2 id="vscode-常用插件配置">vscode 常用插件配置</h2>
+<ol>
+<li>Material Theme</li>
+</ol>
+<p>可以直接美化背景和代码高亮，非常好看</p>
+<ol start="2">
+<li>GitLens</li>
+</ol>
+<p>经典的展示 git 提交历史的插件，也是非常好用</p>
+<ol start="3">
+<li>CMake</li>
+</ol>
+<p>能使CMakeLists.txt的书写变得容易，具有自动补全和高亮功能。</p>
+<h1 id="常见问题">常见问题</h1>
+<h2 id="Include-报错">Include 报错</h2>
+<p><code>CTRL + SHIFT + P</code> 打开 vscode 终端，搜索 JSON，选中 <code>C/C++: Edit Configurations(JSON)</code> 然后在 “includePath” 中增加需要 include 的路径（不同的库文件，路径不相同），可以在命令行使用 <code>pkg-config --cflags &lt;pkg-name&gt;</code> 的方式获取对应包的编译路径。</p>
+<p>对于 glib.h ，可以参考以下格式：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;configurations&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;name&quot;: &quot;Linux&quot;,</span><br><span class="line">            &quot;includePath&quot;: [</span><br><span class="line">                &quot;$&#123;workspaceFolder&#125;/**&quot;,</span><br><span class="line">                &quot;/usr/include/glib-2.0&quot;,</span><br><span class="line">                &quot;/usr/lib/x86_64-linux-gnu/glib-2.0/include&quot;</span><br><span class="line">            ],</span><br><span class="line">            &quot;defines&quot;: [],</span><br><span class="line">            &quot;compilerPath&quot;: &quot;/usr/bin/gcc&quot;,</span><br><span class="line">            &quot;cStandard&quot;: &quot;c17&quot;,</span><br><span class="line">            &quot;cppStandard&quot;: &quot;c++98&quot;,</span><br><span class="line">            &quot;intelliSenseMode&quot;: &quot;linux-gcc-x64&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;version&quot;: 4</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>❗注意：</p>
+<p>有时候配置文件中会出现一行： <code>&quot;configurationProvider&quot;: &quot;ms-vscode.makefile-tools&quot;</code>，它告诉 VS Code 的 C/C++ 扩展：<strong>不要用 c_cpp_properties.json 的配置</strong>， 而是去问 <strong>Makefile Tools 扩展</strong>，让它来提供 includePath、defines 等。</p>
+<p>因此，把这行删除即可。</p>
+<h2 id="云服务器-ssh-断连">云服务器 ssh 断连</h2>
+<p>ssh 服务的稳定需要占用一定的带宽和 IO，如果系统 CPU 和 IO 占用率过高，将会导致 ssh 超时而自动断开连接。</p>
+<p>解决方案：</p>
+<ol>
+<li>提升 ssh cpu 占用优先级</li>
+<li>提升 ssh 带宽占用优先级</li>
+<li>修改 ssh 配置文件</li>
+<li>换用更轻量级的工具连接，cursor 工具增加了较多负载压力，可以直接换成 terminal 执行命令。</li>
+</ol>
+<p>主要有以下几个思路，具体解决方案可以参考 AI 工具</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io">Bo Han</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io/2025/06/11/%E9%9A%8F%E7%AC%94/useful-tools/">https://lingwu-hb.github.io/2025/06/11/%E9%9A%8F%E7%AC%94/useful-tools/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/useful-tools/">useful tools</a></div><div class="post-share"><div class="social-share" data-image="/img/yaojie.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/06/06/algo/attention-mechanism/" title="attention mechanism"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">attention mechanism</div></div><div class="info-2"><div class="info-item-1">Transformer 的向量化与 Attention 机制解析 参考视频 向量化（Embedding） 向量化是将输入文本中的单词或子词（Token）转化为高维向量（Embedding）的过程。每个 Token 会被映射到一个高维空间中的向量，用于表示其语义信息。 在 Transformer 的原始论文中，Embedding 的维度通常设为 512： $$ dim_emb = 512 $$  初始 Embedding：相同的 Token（例如同一个单词）会被赋予相同的初始 Embedding 向量。 上下文调整：由于同一个单词在不同句子或同一句子的不同位置可能具有不同含义，Transformer 通过后续的 Attention 机制和位置编码（Positional Encoding）调整每个 Token 的 Embedding，使其不仅表示单词本身，还能捕捉丰富的上下文信息。  直观理解：你可以将 Embedding 想象成一个高维空间中的“坐标点”，每个 Token 是一个点，而 Transformer...</div></div></div></a><a class="pagination-related" href="/2025/06/29/AICache/%E4%B8%80%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%9D%90%E6%96%99%E6%B1%87%E6%80%BB/" title="一二阶段材料汇总"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">一二阶段材料汇总</div></div><div class="info-2"><div class="info-item-1">一阶段 在 ocf 中实现二次准入策略。 动机 trace 中存在大量只会访问一次的请求，用二次准入过滤掉这些请求，防止其污染缓存空间。 技术点 将每个请求划分成若干个 4K 块，然后对每个 4K 块进行哈希处理，判断该 4K 块之前是否出现过。如果某个请求中，之前出现过的 4K 块的数量超过阈值，则该请求准入；否则，该请求不予准入。 核心代码 12345678910111213141516171819202122232425bool ocf_history_check_second_chance(uint64_t addr, uint64_t size) &#123;    // 计算页面对齐的地址    uint64_t start_addr = PAGE_ALIGN_DOWN(addr);    uint64_t end_addr = PAGE_ALIGN_DOWN(addr + size - 1);    uint64_t total_pages = PAGES_IN_REQ(start_addr, end_addr);    uint64_t hit_pages =...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-number">1.</span> <span class="toc-text">常用工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-zsh-oh-my-zsh"><span class="toc-number">1.1.</span> <span class="toc-text">配置 zsh &amp;&amp; oh-my-zsh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-conda"><span class="toc-number">1.2.</span> <span class="toc-text">安装 conda</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.3.</span> <span class="toc-text">文件上传与下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Git-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.</span> <span class="toc-text">Git 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%9B%B8%E5%85%B3"><span class="toc-number">1.4.1.</span> <span class="toc-text">分支相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%AB%AF%E4%BB%93%E5%BA%93%E7%9B%B8%E5%85%B3"><span class="toc-number">1.4.2.</span> <span class="toc-text">远端仓库相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tag-%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.3.</span> <span class="toc-text">Tag 相关操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vscode-%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.</span> <span class="toc-text">vscode 常用插件配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Include-%E6%8A%A5%E9%94%99"><span class="toc-number">2.1.</span> <span class="toc-text">Include 报错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8-ssh-%E6%96%AD%E8%BF%9E"><span class="toc-number">2.2.</span> <span class="toc-text">云服务器 ssh 断连</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/09/AICache/thirdStage/Mithril-intro/" title="Mithril intro">Mithril intro</a><time datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey">RL paper survey</a><time datetime="2025-07-04T02:03:02.000Z" title="Created 2025-07-04 10:03:02">2025-07-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

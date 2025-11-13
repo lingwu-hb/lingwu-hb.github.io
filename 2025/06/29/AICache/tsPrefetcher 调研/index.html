@@ -1,0 +1,444 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>tsPrefetcher 调研 | Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="有以下几个关键点：  预取出来的 IO 会如何进行处理？会不会和原 IO 串行处理，从而影响原 IO？  空间上会抢占 cache 的空间；时间上，若生成预取 IO 的速度太慢，将会影响下一个原 IO 的处理速度。  该预取器集成了时间和空间预取器？分别而言，时间和空间预取器各自是如何展开工作的呢？  详见下文 Mithril 和 OBL tsPrefetchus 预取器 概述 tsPrefetc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tsPrefetcher 调研">
+<meta property="og:url" content="https://lingwu-hb.github.io/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="有以下几个关键点：  预取出来的 IO 会如何进行处理？会不会和原 IO 串行处理，从而影响原 IO？  空间上会抢占 cache 的空间；时间上，若生成预取 IO 的速度太慢，将会影响下一个原 IO 的处理速度。  该预取器集成了时间和空间预取器？分别而言，时间和空间预取器各自是如何展开工作的呢？  详见下文 Mithril 和 OBL tsPrefetchus 预取器 概述 tsPrefetc">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
+<meta property="article:published_time" content="2025-06-29T04:55:08.000Z">
+<meta property="article:modified_time" content="2025-11-04T11:50:50.887Z">
+<meta property="article:author" content="Bo Han">
+<meta property="article:tag" content="实习项目">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lingwu-hb.github.io/img/yaojie.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "tsPrefetcher 调研",
+  "url": "https://lingwu-hb.github.io/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/",
+  "image": "https://lingwu-hb.github.io/img/yaojie.jpg",
+  "datePublished": "2025-06-29T04:55:08.000Z",
+  "dateModified": "2025-11-04T11:50:50.887Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Bo Han",
+      "url": "https://lingwu-hb.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lingwu-hb.github.io/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'tsPrefetcher 调研',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">tsPrefetcher 调研</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">tsPrefetcher 调研</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-06-29T04:55:08.000Z" title="Created 2025-06-29 12:55:08">2025-06-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-04T11:50:50.887Z" title="Updated 2025-11-04 19:50:50">2025-11-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>有以下几个关键点：</p>
+<ol>
+<li>预取出来的 IO 会如何进行处理？会不会和原 IO 串行处理，从而影响原 IO？</li>
+</ol>
+<p>空间上会抢占 cache 的空间；时间上，若生成预取 IO 的速度太慢，将会影响下一个原 IO 的处理速度。</p>
+<ol start="2">
+<li>该预取器集成了时间和空间预取器？分别而言，时间和空间预取器各自是如何展开工作的呢？</li>
+</ol>
+<p>详见下文 Mithril 和 OBL</p>
+<h1 id="tsPrefetchus-预取器">tsPrefetchus 预取器</h1>
+<h2 id="概述">概述</h2>
+<p>tsPrefetchus 是一个混合预取器，它结合了两种不同类型的预取策略：</p>
+<ol>
+<li><strong>顺序预取器</strong>（sequential prefetcher）：如 <strong>OBL</strong>, AMP, Leap 等</li>
+<li><strong>历史预取器</strong>（history prefetcher）：如 <strong>Mithril</strong>, PG 等</li>
+</ol>
+<p>这个预取器的核心思想是动态调整这两种预取策略的权重，以适应不同的访问模式。</p>
+<h2 id="工作原理">工作原理</h2>
+<h3 id="混合预取策略">混合预取策略</h3>
+<p>tsPrefetchus 同时使用顺序预取器和历史预取器来预测未来可能访问的对象：</p>
+<ul>
+<li><strong>顺序预取器</strong>：基于空间局部性原理，预取与当前访问对象在空间上相邻的对象</li>
+<li><strong>历史预取器</strong>：基于时间局部性和访问模式，预取历史上与当前访问模式相似的对象</li>
+</ul>
+<h3 id="自适应权重调整">自适应权重调整</h3>
+<p>tsPrefetchus 为每个预取器维护一个权重映射，根据预取效果动态调整权重：</p>
+<ul>
+<li>当预取的对象被访问（命中）时，增加对应预取器的权重</li>
+<li>当预取的对象被驱逐且未被访问时，减少对应预取器的权重</li>
+</ul>
+<h3 id="概率性预取决策">概率性预取决策</h3>
+<p>预取决策是概率性的，概率由各预取器的权重决定：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">r = random(0, 1)</span><br><span class="line">if (r &lt; 预取器权重) &#123;</span><br><span class="line">    执行预取</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种机制允许系统在不同预取策略间进行探索和利用的平衡。</p>
+<h3 id="学习率动态调整">学习率动态调整</h3>
+<p>tsPrefetchus 使用动态学习率来控制权重调整的幅度：</p>
+<ul>
+<li>定期计算当前命中率与先前命中率的变化</li>
+<li>根据命中率变化和学习率变化的关系，调整学习率的方向和大小</li>
+<li>当命中率持续降低或为零时，随机重置学习率以跳出局部最优</li>
+</ul>
+<h2 id="关键组件">关键组件</h2>
+<h3 id="预取执行">预取执行</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void tsPrefetchus_prefetch(cache_t *cache, const request_t *req) &#123;</span><br><span class="line">    // 获取预取器参数</span><br><span class="line">    // 初始化权重（如果不存在）</span><br><span class="line">    </span><br><span class="line">    // 历史预取器部分</span><br><span class="line">    r = random(0, 1)</span><br><span class="line">    if (r &lt; 历史预取器权重[req-&gt;obj_id]) &#123;</span><br><span class="line">        获取历史预取列表</span><br><span class="line">        标记并插入预取对象</span><br><span class="line">        更新统计信息</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 顺序预取器部分</span><br><span class="line">    r = random(0, 1)</span><br><span class="line">    if (r &lt; 顺序预取器权重[merge_place]) &#123;</span><br><span class="line">        获取顺序预取列表</span><br><span class="line">        标记并插入预取对象</span><br><span class="line">        更新统计信息</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="权重调整">权重调整</h3>
+<p>参考论文 4.2.3 和 4.3.3 节部分内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">// 命中时增加权重</span><br><span class="line">void tsPrefetchus_handle_find(cache_t *cache, const request_t *req, bool hit) &#123;</span><br><span class="line">    if (命中 &amp;&amp; 是预取的对象) &#123;</span><br><span class="line">        if (顺序预取) &#123;</span><br><span class="line">            顺序预取器权重 *= exp(学习率)</span><br><span class="line">        &#125; else if (历史预取) &#123;</span><br><span class="line">            历史预取器权重 *= exp(学习率)</span><br><span class="line">        &#125;</span><br><span class="line">        更新预取命中统计</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 定期更新学习率</span><br><span class="line">    if (时间到达更新间隔) &#123;</span><br><span class="line">        更新学习率</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 驱逐时减少权重</span><br><span class="line">void tsPrefetchus_handle_evict(cache_t *cache, const request_t *check_req) &#123;</span><br><span class="line">    if (是预取的对象 &amp;&amp; 未被访问) &#123;</span><br><span class="line">        if (顺序预取) &#123;</span><br><span class="line">            顺序预取器权重 *= exp(-学习率)</span><br><span class="line">        &#125; else if (历史预取) &#123;</span><br><span class="line">            历史预取器权重 *= exp(-学习率)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="学习率调整">学习率调整</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">void ts_update_lr(cache_t *cache) &#123;</span><br><span class="line">    // 计算当前命中率</span><br><span class="line">    hit_rate_current = num_hit / lr_update_interval</span><br><span class="line">    </span><br><span class="line">    // 计算变化</span><br><span class="line">    delta_hit_rate = hit_rate_current - hit_rate_prev</span><br><span class="line">    delta_lr = lr - lr_previous</span><br><span class="line">    </span><br><span class="line">    // 更新历史值</span><br><span class="line">    lr_previous = lr</span><br><span class="line">    hit_rate_prev = hit_rate_current</span><br><span class="line">    </span><br><span class="line">    // 调整学习率</span><br><span class="line">    if (delta_lr != 0) &#123;</span><br><span class="line">        if (delta_hit_rate / delta_lr &gt; 0) &#123;</span><br><span class="line">            增加学习率</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            减少学习率</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        如果命中率为零或下降，增加unlearn_count</span><br><span class="line">        如果unlearn_count达到阈值，随机重置学习率</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // 重置命中计数</span><br><span class="line">    num_hit = 0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="工作流程总结">工作流程总结</h2>
+<ol>
+<li>调用 <code>tsPrefetchus_prefetch</code>，分别从历史预取器和顺序预取器获取预取候选列表</li>
+<li>根据各自权重决定是否执行预取</li>
+<li>预取的对象被标记来源（顺序或历史）</li>
+<li>当预取对象被访问或驱逐时，相应调整预取器权重</li>
+<li>定期更新学习率以优化预取效果</li>
+</ol>
+<p>这种设计使 tsPrefetchus 能够适应不同的访问模式，在顺序访问和历史模式访问之间找到平衡，提高整体缓存命中率。</p>
+<h1 id="Mithril">Mithril</h1>
+<p>典型的时间关联预取策略</p>
+<p>定期对偏移量请求时间矩阵进行时间关联关系的挖掘，具体而言，是如何执行定期挖掘的呢？</p>
+<h2 id="重要数据结构：">重要数据结构：</h2>
+<ul>
+<li>预取过程中用到</li>
+</ul>
+<ol>
+<li>Mithril_params-&gt;prefetch_hashtable：哈希表，将对象ID映射到预取表数组中的索引位置，用于快速查找对象的预取候选项。每次挖掘的时候都需要更新该表。</li>
+<li>Mithril_params-&gt;ptable_array：二维数组，内部组织格式为：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ptable_array[0]: [obj1, pf1, pf2, pf3, obj2, pf1, pf2, pf3, ...] (直到第1000个对象)</span><br><span class="line">ptable_array[1]: [obj1001, pf1, pf2, pf3, obj1002, ...] (第1001到第2000个对象)</span><br><span class="line">ptable_array[2]: [obj2001, pf1, pf2, pf3, ...] (第2001个对象开始)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>记录和挖掘过程中用到：</li>
+</ul>
+<ol start="3">
+<li>记录表：Mithril_params-&gt;rmtable-&gt;recording_table，一维数组</li>
+<li>挖掘表：Mithril_params-&gt;rmtable-&gt;mining_table，一维数组</li>
+</ol>
+<h2 id="prefetch-流程">prefetch 流程</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">// Lookup the current object in the prefetch hashtable to find its prefetch candidates</span><br><span class="line">gint prefetch_table_index =</span><br><span class="line">    GPOINTER_TO_INT(g_hash_table_lookup(Mithril_params-&gt;prefetch_hashtable, GINT_TO_POINTER(req-&gt;obj_id)));</span><br><span class="line"></span><br><span class="line">// Calculate the position in the 2D prefetch table array</span><br><span class="line">// dim1: which shard in the array</span><br><span class="line">// dim2: position within the shard (each entry has pf_list_size+1 elements)</span><br><span class="line">gint dim1 = (gint)floor(prefetch_table_index / (double)PREFETCH_TABLE_SHARD_SIZE);</span><br><span class="line">gint dim2 = prefetch_table_index % PREFETCH_TABLE_SHARD_SIZE * (Mithril_params-&gt;pf_list_size + 1);</span><br><span class="line"></span><br><span class="line">// Iterate through prefetch candidates for this object</span><br><span class="line">  // Start from 1 because index 0 stores the original object ID</span><br><span class="line">  for (i = 1; i &lt; Mithril_params-&gt;pf_list_size + 1; i++) &#123;</span><br><span class="line">    // If we reach the end of valid prefetch candidates, stop</span><br><span class="line">    if (Mithril_params-&gt;ptable_array[dim1][dim2 + i] == 0) &#123;</span><br><span class="line">      break;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    // Set the prefetch candidate&#x27;s object ID and size</span><br><span class="line">    new_req-&gt;obj_id = Mithril_params-&gt;ptable_array[dim1][dim2 + i];</span><br><span class="line">    // Use block_size as the object size (previously used a size mapping)</span><br><span class="line">    new_req-&gt;obj_size = Mithril_params-&gt;block_size;</span><br><span class="line">  </span><br><span class="line">    // Skip if the object is already in cache</span><br><span class="line">    if (cache-&gt;find(cache, new_req, false)) &#123;</span><br><span class="line">      continue;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    // Make room in the cache if needed by evicting objects</span><br><span class="line">    while ((long)cache-&gt;get_occupied_byte(cache) + new_req-&gt;obj_size + cache-&gt;obj_md_size &gt; (long)cache-&gt;cache_size) &#123;</span><br><span class="line">      cache-&gt;evict(cache, new_req);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Insert the prefetched object into cache</span><br><span class="line">    cache-&gt;insert(cache, new_req);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="挖掘流程">挖掘流程</h2>
+<ol>
+<li>_Mithril_record_entry 流程</li>
+</ol>
+<p><code>find</code> 和 <code>evict</code> 的时候调用 <code>_Mithril_record_entry</code> 进行维护</p>
+<p>用到了三个数据结构</p>
+<p>记录表(recording table)：初始收集访问记录的表，存储对象ID和时间戳</p>
+<p>挖掘表(mining table)：当记录达到一定条件后，从记录表移动到挖掘表进行模式分析</p>
+<p>哈希表(hashtable)：用于快速查找对象在记录表或挖掘表中的位置</p>
+<p>大致流程为：</p>
+<p><strong>首先将请求放置到记录表中，出现一定次数之后转移到挖掘表中，若挖掘表长度满足阈值，调用</strong><code>**_Mithril_mining**</code><strong>函数进行挖掘操作</strong></p>
+<ol start="2">
+<li>_Mithril_mining 流程</li>
+</ol>
+<p>假设我们有以下访问序列（对象ID和访问时间戳）：</p>
+<ul>
+<li>挖掘表内容:</li>
+</ul>
+<p>对象A: 时间戳 [10, 25, 40]</p>
+<p>对象B: 时间戳 [11, 26, 41]</p>
+<p>对象C: 时间戳 [20, 35, 50]</p>
+<p>对象D: 时间戳 [30, 45, 60]</p>
+<p>首先按照第一个时间戳进行排序</p>
+<p>然后进行两两比较，A 和 B、C、D；B 和 C、D；C 和 D比较</p>
+<ul>
+<li>比较A和B:</li>
+</ul>
+<p>检查第一个时间戳差异: |10-11| = 1 &lt; lookahead_range (假设为20)</p>
+<p>时间戳数量相同，都是3个</p>
+<p>比较时间戳序列相似性:</p>
+<p>|10-11| = 1 (相邻，标记为关联)</p>
+<p>|25-26| = 1 (相邻，关联确认)</p>
+<p>|40-41| = 1 (相邻，关联确认)</p>
+<p>associated_flag = TRUE，将A和B添加到预取表</p>
+<ul>
+<li>比较A和C:</li>
+</ul>
+<p>检查第一个时间戳差异: |10-20| = 10 &lt; lookahead_range</p>
+<p>时间戳数量相同，都是3个</p>
+<p>比较时间戳序列相似性:</p>
+<p>|10-20| = 10 (在范围内，但不相邻)</p>
+<p>|25-35| = 10 (在范围内，但不相邻)</p>
+<p>|40-50| = 10 (在范围内，但不相邻)</p>
+<p>因为没有相邻时间戳，且first_flag已经为FALSE，所以associated_flag = FALSE，不添加到预取表</p>
+<h1 id="OBL">OBL</h1>
+<p>典型的空间关联预取策略</p>
+<h2 id="prefetch-流程-v2">prefetch 流程</h2>
+<p>整体逻辑非常简单，直接预取下一个块的数据即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void OBL_prefetch(cache_t *cache, const request_t *req) &#123;</span><br><span class="line">    // 一个大的逻辑 io 会被划分为多个连续的块请求，一次逻辑 io 结束后才会进行预取</span><br><span class="line">    if (req-&gt;offset_end &amp;&amp; OBL_params-&gt;do_prefetch) &#123;</span><br><span class="line">        new_req-&gt;obj_size = OBL_params-&gt;block_size;</span><br><span class="line">        new_req-&gt;obj_id = req-&gt;obj_id + 1;</span><br><span class="line">        if (cache-&gt;find(cache, new_req, false)) &#123;</span><br><span class="line">            free_request(new_req);</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        // 如果 cache 空间不足，evict some space</span><br><span class="line">        while (cache-&gt;get_occupied_byte(cache) + OBL_params-&gt;block_size + cache-&gt;obj_md_size &gt; cache-&gt;cache_size) &#123;</span><br><span class="line">            cache-&gt;evict(cache, req);</span><br><span class="line">        &#125;</span><br><span class="line">        if (strcasecmp(cache-&gt;prefetcher-&gt;name, &quot;OBL&quot;) == 0) &#123;</span><br><span class="line">            cache-&gt;prefetcher-&gt;total_prefetch++;</span><br><span class="line">            new_req-&gt;prefetch_flag = 1;</span><br><span class="line">        &#125;</span><br><span class="line">        cache-&gt;insert(cache, new_req);</span><br><span class="line">        free_request(new_req);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>if (req-&gt;offset_end &amp;&amp; OBL_params-&gt;do_prefetch)</code> 该判断逻辑中，req-&gt;offset_end 表示该 req 是否是一次逻辑 io 的最后一个 req。<code>OBL_params-&gt;do_prefetch</code> 由预取器进行维护。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">typedef struct OBL_params &#123;</span><br><span class="line">  int32_t block_size;</span><br><span class="line">  bool do_prefetch;</span><br><span class="line"></span><br><span class="line">  uint32_t curr_idx;                // current index in the prev_access_block</span><br><span class="line">  int32_t sequential_confidence_k;  // number of prev sequential accesses to be</span><br><span class="line">                                    // considered as a sequential access</span><br><span class="line">  obj_id_t* prev_access_block;      // prev k accessed</span><br><span class="line">&#125; OBL_params_t;</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>obj_id_t* prev_access_block</code> 中会保存 <code>int32_t sequential_confidence_k;</code> 个之前连续的访问，达到阈值之后，<code>do_prefetch</code> 参数才会被赋值为 <code>true</code></p>
+<h1 id="Das-中实现">Das 中实现</h1>
+<h2 id="问题">问题</h2>
+<ol>
+<li>同步和异步的问题</li>
+</ol>
+<p>das 中预取推荐的过程和处理正常 IO 的过程是相互异步的，推荐的过程不会影响后续的正常 IO；</p>
+<p>METS 中则是每次处理完成一个 IO 之后，都会进行预取操作</p>
+<ol start="2">
+<li>多种专家更新需要一些信息</li>
+</ol>
+<p>例如，更新权重需要知道传入的请求是否命中，传入到 das 中的请求，并不知道其是否命中。libCacheus 中并不存在多线程冲突问题，因为每个线程都有自己单独的 cache。但是 das 中需要考虑。</p>
+<h2 id="流程">流程</h2>
+<h3 id="框架统一">框架统一</h3>
+<ol>
+<li>将目前的关联流改造成多专家模式中的其中一个专家（需要同步出一些接口函数）</li>
+<li>增加一个顺序流的专家（OBL）</li>
+<li>将两个专家嵌入成 tsprefetchus 接口，并设置权重更新机制</li>
+</ol>
+<h1 id="tsPrefetcher-代码分析">tsPrefetcher 代码分析</h1>
+<ol>
+<li>修改代码，先把结果输出出来</li>
+<li>梳理一下模拟器的运行环境和一些参数信息</li>
+</ol>
+<h2 id="参数信息">参数信息</h2>
+<p>必要参数</p>
+<p>trace_path：数据访问轨迹文件路径，支持zstd压缩格式</p>
+<p>trace_type：轨迹文件类型，支持txt/csv/twr/vscsi/oracleGeneralBin等</p>
+<p>eviction_algo：缓存替换算法，支持LRU/LFU/FIFO/ARC/LeCaR/Cacheus等</p>
+<p>cache_size：缓存大小，支持字节单位或KB/MB/GB后缀</p>
+<p>主要可选参数</p>
+<p>轨迹读取相关</p>
+<p>–trace-type-params/-t：CSV等轨迹的额外参数，如&quot;obj-id-col=1;delimiter=,&quot;</p>
+<p>–num-req/-n：处理的请求数量，默认-1表示全部处理</p>
+<p>–sample-ratio/-s：采样比例，1表示全采样，0.01表示采样1%的对象</p>
+<p>–ignore-obj-size：忽略轨迹中的对象大小</p>
+<p>缓存算法相关</p>
+<p>–eviction-params/-e：替换算法的参数，如&quot;n-seg=4&quot;</p>
+<p>–admission：准入算法，如size/bloom-filter/prob</p>
+<p>–admission-params：准入算法参数</p>
+<p>–prefetch：预取算法，如Mithril/OBL/PG/AMP/Prefetchus</p>
+<p>–prefetch-params：预取算法参数，如&quot;block-size=65536&quot;</p>
+<p>–consider-obj-metadata：是否考虑每个对象的元数据大小</p>
+<p>其他选项</p>
+<p>–output/-o：输出路径</p>
+<p>–num-thread：多线程模式下的线程数，默认使用可用CPU核心数</p>
+<p>–report-interval：单缓存运行时报告统计的频率</p>
+<p>–warmup-sec：预热时间（秒）</p>
+<p>–use-ttl：是否使用轨迹中的TTL信息</p>
+<p>–verbose/-v：详细输出</p>
+<p>模拟器内部处理流程</p>
+<p>参数初始化和解析：通过parse_cmd函数解析命令行参数</p>
+<p>轨迹读取器设置：根据指定的轨迹文件类型和参数配置读取器</p>
+<p>缓存大小转换：将用户指定的缓存大小转换为字节单位，支持使用工作集大小的比例</p>
+<p>缓存创建：为每个替换算法和缓存大小组合创建缓存实例</p>
+<p>准入和预取配置：根据用户参数配置准入控制器和预取器</p>
+<p>模拟执行：根据读取的轨迹数据运行缓存模拟</p>
+<p>结果输出：输出模拟结果，包括命中率等性能指标</p>
+<h2 id="如何和-das-保持一致">如何和 das 保持一致</h2>
+<p>需要注意的参数</p>
+<ol>
+<li>
+<p>每级缓存容量</p>
+</li>
+<li>
+<p>缓存块大小</p>
+</li>
+<li>
+<p>写策略</p>
+</li>
+<li>
+<p>ocf 中只有读请求，不考虑写，但是需要进行数据预埋</p>
+</li>
+<li>
+<p>淘汰策略</p>
+</li>
+<li>
+<p>访问延迟参数（用于模拟延迟时间）</p>
+</li>
+<li>
+<p>数据集</p>
+</li>
+<li>
+<p>这个可以直接下载部分数据集到本地，然后跑比较典型的 msrc 数据集</p>
+</li>
+<li>
+<p>高并发性（似乎无法模拟）</p>
+</li>
+</ol>
+<p>修改一些主要的配置参数，尝试保持和 das 一致。</p>
+<ol>
+<li>
+<p>缓存大小</p>
+</li>
+<li>
+<p>测试集</p>
+</li>
+<li>
+<p>缓存策略</p>
+</li>
+<li>
+<p>周二才开始拿到完整项目，配置环境，成功跑起来</p>
+</li>
+<li>
+<p>还在对项目进行断点跟进调试</p>
+</li>
+</ol>
+<h2 id="更换-trace-为-MSRC">更换 trace 为 MSRC</h2>
+<p>tsPrefetcher 中主要由 reader 部件处理不同的 trace，reader 对外提供的核心接口为：read_one_req() 函数，用于提取一个正确的请求。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io">Bo Han</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/">https://lingwu-hb.github.io/2025/06/29/AICache/tsPrefetcher%20%E8%B0%83%E7%A0%94/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%9E%E4%B9%A0%E9%A1%B9%E7%9B%AE/">实习项目</a></div><div class="post-share"><div class="social-share" data-image="/img/yaojie.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/06/29/AICache/%E4%B8%80%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%9D%90%E6%96%99%E6%B1%87%E6%80%BB/" title="一二阶段材料汇总"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">一二阶段材料汇总</div></div><div class="info-2"><div class="info-item-1">一阶段 在 ocf 中实现二次准入策略。 动机 trace 中存在大量只会访问一次的请求，用二次准入过滤掉这些请求，防止其污染缓存空间。 技术点 将每个请求划分成若干个 4K 块，然后对每个 4K 块进行哈希处理，判断该 4K 块之前是否出现过。如果某个请求中，之前出现过的 4K 块的数量超过阈值，则该请求准入；否则，该请求不予准入。 核心代码 12345678910111213141516171819202122232425bool ocf_history_check_second_chance(uint64_t addr, uint64_t size) &#123;    // 计算页面对齐的地址    uint64_t start_addr = PAGE_ALIGN_DOWN(addr);    uint64_t end_addr = PAGE_ALIGN_DOWN(addr + size - 1);    uint64_t total_pages = PAGES_IN_REQ(start_addr, end_addr);    uint64_t hit_pages =...</div></div></div></a><a class="pagination-related" href="/2025/06/29/%E5%BC%80%E9%A2%98/%E5%89%8D%E6%9C%9F%E8%B0%83%E7%A0%94/" title="前期调研"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">前期调研</div></div><div class="info-2"><div class="info-item-1">确定大的研究方向 主要背景图如下所示：  具体时间节点 三个月时间 确定题目：一个半月 文献调研 + 材料整理：一个半月 目前工作重点  确定访问模式，最好能根据 cacheus 的方法进行实验验证  开展实验的话，是否需要租用 GPU？了解一下 cacheus 分析访问模式的方法，用于参考学习  相关文献调研，判断业界目前采用何种方式进行预取？  主要需要和传统块存储进行对比，大概率大模型 prefill 和 inference 阶段有其独特的访问模式！ 主要方向：KV Cache 缓存管理加速推理速度方向，不限定为一定要预取！ 后面阅读文章的时候需要重点关注：文章的问题总结出来，文章主要解决哪些问题，还有哪些没有解决的问题，从问题中发现创新点。 ‼️‼️‼️ 当前需要工作内容  阅读 《3.3　智能显存分配与预取》中提及的相关论文，然后提取相关内容到重点论文分析中。  开题思路 相关问题   实验室大方向是什么？能不能搞 LLM 推理加速   实验室有哪些人在搞大模型方向，具体是哪个方向   LLM 背景知识不足，开题的题目不太能想出 idea   LLM KV Cache...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/02/03/AICache/Ceph%E9%83%A8%E7%BD%B2/" title="Ceph部署"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-03</div><div class="info-item-2">Ceph部署</div></div><div class="info-2"><div class="info-item-1">Ceph Monitor职责  维护集群状态图（Cluster Map），Cluster Map为全局的元数据，包括以下信息:   OSD Map	记录所有 OSD 节点的状态（如在线/离线）、存储容量、数据分布规则（CRUSH 算法配置）。 MON Map	记录 Monitor 节点自身的列表和地址。 PG Map	管理 Placement Group（PG）的映射关系（PG 是数据分片逻辑单元）。 MDS Map（仅当使用 CephFS 时）	记录 Metadata Server 的状态。    管理集群的 Paxos 共识，确保Cluster Map的强一致性。   处理客户端请求 客户端（如 RBD、RGW、CephFS）首次连接集群时，会从 Monitor 获取最新的 Cluster Map，用于确定数据的读写位置（如 OSD 地址）。客户端后续操作直接与 OSD 通信，无需持续依赖 Monitor（除非 Cluster Map 更新）。   监控集群健康状态   管理身份认证与权限   协调 PG 状态变更   处理配置变更 1ceph-deploy mon...</div></div></div></a><a class="pagination-related" href="/2025/06/29/AICache/%E4%B8%80%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%9D%90%E6%96%99%E6%B1%87%E6%80%BB/" title="一二阶段材料汇总"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-29</div><div class="info-item-2">一二阶段材料汇总</div></div><div class="info-2"><div class="info-item-1">一阶段 在 ocf 中实现二次准入策略。 动机 trace 中存在大量只会访问一次的请求，用二次准入过滤掉这些请求，防止其污染缓存空间。 技术点 将每个请求划分成若干个 4K 块，然后对每个 4K 块进行哈希处理，判断该 4K 块之前是否出现过。如果某个请求中，之前出现过的 4K 块的数量超过阈值，则该请求准入；否则，该请求不予准入。 核心代码 12345678910111213141516171819202122232425bool ocf_history_check_second_chance(uint64_t addr, uint64_t size) &#123;    // 计算页面对齐的地址    uint64_t start_addr = PAGE_ALIGN_DOWN(addr);    uint64_t end_addr = PAGE_ALIGN_DOWN(addr + size - 1);    uint64_t total_pages = PAGES_IN_REQ(start_addr, end_addr);    uint64_t hit_pages =...</div></div></div></a><a class="pagination-related" href="/2025/03/18/AICache/%E4%BA%8C%E6%AC%A1%E5%87%86%E5%85%A5IO%E8%BF%87%E6%BB%A4%E7%AE%97%E6%B3%95/" title="二次准入IO过滤算法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-18</div><div class="info-item-2">二次准入IO过滤算法</div></div><div class="info-2"><div class="info-item-1">问题 改为 4K 后，通过火焰图分析，发现历史哈希表的插入和查找过程非常耗时，分别为整个系统用时的 19.3% 和 34.11%。 打印出哈希表的状态发现，哈希表中冲突链的个数过多。 初步分析，因为是因为初始的时候哈希表的长度过小，并且 IO 涉及的 4K 块访问地址跨度过大，导致此问题发生。 改进想法  增加哈希表初始化的大小 限制冲突链表的长度值  </div></div></div></a><a class="pagination-related" href="/2025/02/23/system/C%E8%AF%AD%E8%A8%80%E5%AE%8F%E5%AE%9A%E4%B9%89%E9%80%9A%E8%BF%87%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E8%8E%B7%E5%8F%96%E7%B1%BB%E6%8C%87%E9%92%88%E6%9C%80%E4%BC%98%E8%A7%A3/" title="C语言宏定义通过成员变量获取类指针最优解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-02-23</div><div class="info-item-2">C语言宏定义通过成员变量获取类指针最优解</div></div><div class="info-2"><div class="info-item-1">问题简介 最近在看开源 OCF 源码的时候，发现了一个 C 语言宏定义的常见使用技巧。从初见的不解，到了解之后的惊叹，不得不感叹于底层开发人员关于性能的极致追求！ 在编程开发中，经常需要进行变量之间的类型转换操作。一个类 A 中存在类型为B 的成员变量。假设现在我拥有一个类型为 B 的变量 v1，我需要得到一个类型为 A 的变量 v2，同时 v2-&gt;B 就为变量 v1。 方法一 一般来说，对于此类问题，熟悉 C++ 的初学者会考虑采用以下的方法实现： 12345678910111213141516// 用宏定义实现此功能！#define CONVERT_B_TO_A(v1) A(v1)class B &#123;    // B 类的定义&#125;;class A &#123;public:    B b;    A(const B&amp; b_val) : b(b_val) &#123;&#125;&#125;;int main() &#123;    B v1;    A v2 = CONVERT_B_TO_A(v1);  // 使用宏进行转换    return...</div></div></div></a><a class="pagination-related" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-04</div><div class="info-item-2">RL paper survey</div></div><div class="info-2"><div class="info-item-1">1. ArtMem ArtMem：Adaptive Migration in Reinforcement Learning-Enabled Tiered Memory 背景： 内存系统只靠 DRAM 不足，因此引入 PM 和基于 CXL 的额外内存，形成快慢速的分层内存系统。 但现有分层内存系统中的页面迁移策略不够...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tsPrefetchus-%E9%A2%84%E5%8F%96%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">tsPrefetchus 预取器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E9%A2%84%E5%8F%96%E7%AD%96%E7%95%A5"><span class="toc-number">1.2.1.</span> <span class="toc-text">混合预取策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E6%9D%83%E9%87%8D%E8%B0%83%E6%95%B4"><span class="toc-number">1.2.2.</span> <span class="toc-text">自适应权重调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E7%8E%87%E6%80%A7%E9%A2%84%E5%8F%96%E5%86%B3%E7%AD%96"><span class="toc-number">1.2.3.</span> <span class="toc-text">概率性预取决策</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%8E%87%E5%8A%A8%E6%80%81%E8%B0%83%E6%95%B4"><span class="toc-number">1.2.4.</span> <span class="toc-text">学习率动态调整</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%BB%84%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">关键组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%8F%96%E6%89%A7%E8%A1%8C"><span class="toc-number">1.3.1.</span> <span class="toc-text">预取执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%87%8D%E8%B0%83%E6%95%B4"><span class="toc-number">1.3.2.</span> <span class="toc-text">权重调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%B0%83%E6%95%B4"><span class="toc-number">1.3.3.</span> <span class="toc-text">学习率调整</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">工作流程总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mithril"><span class="toc-number">2.</span> <span class="toc-text">Mithril</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">重要数据结构：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#prefetch-%E6%B5%81%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">prefetch 流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%96%E6%8E%98%E6%B5%81%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">挖掘流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#OBL"><span class="toc-number">3.</span> <span class="toc-text">OBL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#prefetch-%E6%B5%81%E7%A8%8B-v2"><span class="toc-number">3.1.</span> <span class="toc-text">prefetch 流程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Das-%E4%B8%AD%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.</span> <span class="toc-text">Das 中实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.</span> <span class="toc-text">流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%86%E6%9E%B6%E7%BB%9F%E4%B8%80"><span class="toc-number">4.2.1.</span> <span class="toc-text">框架统一</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tsPrefetcher-%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">tsPrefetcher 代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E4%BF%A1%E6%81%AF"><span class="toc-number">5.1.</span> <span class="toc-text">参数信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%92%8C-das-%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4"><span class="toc-number">5.2.</span> <span class="toc-text">如何和 das 保持一致</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%8D%A2-trace-%E4%B8%BA-MSRC"><span class="toc-number">5.3.</span> <span class="toc-text">更换 trace 为 MSRC</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/09/AICache/thirdStage/Mithril-intro/" title="Mithril intro">Mithril intro</a><time datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey">RL paper survey</a><time datetime="2025-07-04T02:03:02.000Z" title="Created 2025-07-04 10:03:02">2025-07-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

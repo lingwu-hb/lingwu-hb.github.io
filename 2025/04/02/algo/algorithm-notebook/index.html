@@ -1,0 +1,259 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>algorithm notebook | Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="算法笔记 数据结构类 tip string 类常用方法 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include &lt;iostream&gt;#include &lt;string&gt;using namespace std;int main()&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="algorithm notebook">
+<meta property="og:url" content="https://lingwu-hb.github.io/2025/04/02/algo/algorithm-notebook/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="算法笔记 数据结构类 tip string 类常用方法 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#include &lt;iostream&gt;#include &lt;string&gt;using namespace std;int main()&amp;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
+<meta property="article:published_time" content="2025-04-02T09:19:19.000Z">
+<meta property="article:modified_time" content="2025-11-04T11:50:50.888Z">
+<meta property="article:author" content="Bo Han">
+<meta property="article:tag" content="algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lingwu-hb.github.io/img/yaojie.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "algorithm notebook",
+  "url": "https://lingwu-hb.github.io/2025/04/02/algo/algorithm-notebook/",
+  "image": "https://lingwu-hb.github.io/img/yaojie.jpg",
+  "datePublished": "2025-04-02T09:19:19.000Z",
+  "dateModified": "2025-11-04T11:50:50.888Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Bo Han",
+      "url": "https://lingwu-hb.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lingwu-hb.github.io/2025/04/02/algo/algorithm-notebook/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'algorithm notebook',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">algorithm notebook</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">algorithm notebook</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-04-02T09:19:19.000Z" title="Created 2025-04-02 17:19:19">2025-04-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-04T11:50:50.888Z" title="Updated 2025-11-04 19:50:50">2025-11-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Leetcode/">Leetcode</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="算法笔记">算法笔记</h1>
+<h2 id="数据结构类-tip">数据结构类 tip</h2>
+<h3 id="string-类常用方法">string 类常用方法</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//字符数组转字符串</span></span><br><span class="line">    <span class="type">char</span> a[<span class="number">100</span>];</span><br><span class="line">    <span class="function">string <span class="title">s5</span><span class="params">(a)</span></span>;</span><br><span class="line">    cout&lt;&lt;s5&lt;&lt;endl; <span class="comment">//输出World!</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//8、字符串的子串</span></span><br><span class="line">    s1 = <span class="string">&quot;hello World!&quot;</span>;</span><br><span class="line">    s2 = s1.<span class="built_in">substr</span>(<span class="number">2</span>,<span class="number">5</span>);</span><br><span class="line">    cout&lt;&lt;s2&lt;&lt;endl; <span class="comment">//输出 llo W 从下标2开始 截取5个字符</span></span><br><span class="line">    s2 = s1.<span class="built_in">substr</span>(<span class="number">3</span>);</span><br><span class="line">    cout&lt;&lt;s2&lt;&lt;endl; <span class="comment">//输出 llo W 从下标3开始 截取3到末尾的所有字符</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//9、查找字符串的子串</span></span><br><span class="line">    <span class="type">int</span> n = s1.<span class="built_in">find</span>(<span class="string">&quot;World&quot;</span>);</span><br><span class="line">    cout&lt;&lt;n&lt;&lt;endl; <span class="comment">//输出6 即从下标6开始就是这个匹配的字符</span></span><br><span class="line">    cout&lt;&lt;s1.<span class="built_in">find</span>(<span class="string">&quot;o&quot;</span>)&lt;&lt;endl; <span class="comment">//输出4 从前往后查找输出最先匹配到的下标</span></span><br><span class="line">    cout&lt;&lt;s1.<span class="built_in">rfind</span>(<span class="string">&quot;o&quot;</span>)&lt;&lt;endl; <span class="comment">//输出7 从后往前查找输出最先匹配到的下标</span></span><br><span class="line">    cout&lt;&lt;s1.<span class="built_in">find</span>(<span class="string">&quot;oo&quot;</span>)&lt;&lt;endl; <span class="comment">//返回值为 string::npos</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//10、替换字符串</span></span><br><span class="line">    s1 = <span class="string">&quot;hello World!&quot;</span>;</span><br><span class="line">    s1.<span class="built_in">replace</span>(<span class="number">0</span>,<span class="number">5</span>,<span class="string">&quot;fuck&quot;</span>);</span><br><span class="line">    cout&lt;&lt;s1&lt;&lt;endl; <span class="comment">//输出fuck World!</span></span><br><span class="line">    <span class="comment">//指定替换 例如将World! 中的orl 替换成ORL</span></span><br><span class="line">    n = s1.<span class="built_in">find</span>(<span class="string">&quot;orl&quot;</span>);</span><br><span class="line">    s1.<span class="built_in">replace</span>(n,<span class="number">3</span>,<span class="string">&quot;ORL&quot;</span>);</span><br><span class="line">    cout&lt;&lt;s1&lt;&lt;endl; <span class="comment">//输出fuck WORLd!</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//11、删除子串</span></span><br><span class="line">    s1.<span class="built_in">erase</span>(n,<span class="number">3</span>); <span class="comment">//n表示位置 3表示删除三个字符</span></span><br><span class="line">    cout&lt;&lt;s1&lt;&lt;endl; <span class="comment">//输出fuck Wd!</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//12、添加子串</span></span><br><span class="line">    s1.<span class="built_in">insert</span>(<span class="number">5</span>,<span class="string">&quot;aaa&quot;</span>);<span class="comment">//5表示位置 &quot;aaa&quot;表示增加的字符串</span></span><br><span class="line">    cout&lt;&lt;s1&lt;&lt;endl; <span class="comment">//输出fuck aaaWd!</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//13、STL 操作string</span></span><br><span class="line">    <span class="function">string <span class="title">s</span><span class="params">(<span class="string">&quot;afgc1bed3&quot;</span>)</span></span>;</span><br><span class="line">    string::iterator p = <span class="built_in">find</span>(s.<span class="built_in">begin</span>(), s.<span class="built_in">end</span>(), <span class="string">&#x27;c&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (p!= s.<span class="built_in">end</span>())</span><br><span class="line">        cout &lt;&lt; p - s.<span class="built_in">begin</span>() &lt;&lt; endl;  <span class="comment">//输出3 相当于c的指针-头指针</span></span><br><span class="line">    <span class="built_in">sort</span>(s.<span class="built_in">begin</span>(), s.<span class="built_in">end</span>()); <span class="comment">//字符串排序</span></span><br><span class="line">    cout &lt;&lt; s &lt;&lt; endl;  <span class="comment">//输出 13abcdefg</span></span><br><span class="line">    <span class="comment">//其余STL操作就不演示了，基本上都是支持的</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="vector">vector</h3>
+<p>去掉 vector 中的某一个位置的元素。</p>
+<p><code>vec.erase(vec::iterator)</code></p>
+<h3 id="线段树模板">线段树模板</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SegmentTree</span> &#123;</span><br><span class="line">    <span class="comment">// 数组实现线段树，下标从 1 开始</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; _tree;</span><br><span class="line">    <span class="built_in">SegmentTree</span>(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> n) &#123; </span><br><span class="line">        _tree.<span class="built_in">resize</span>(<span class="number">4</span>*(n+<span class="number">1</span>)); </span><br><span class="line">        <span class="built_in">build</span>(nums, <span class="number">1</span>, n, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">maintain</span><span class="params">(<span class="type">int</span> root)</span> </span>&#123;</span><br><span class="line">        _tree[root] = _tree[<span class="number">2</span>*root] + _tree[<span class="number">2</span>*root+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 这里的 [l, r] 表示当前 root 对应的节点所维护的范围</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">build</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">long</span> <span class="type">long</span> root)</span> </span>&#123;  <span class="comment">// 改为 long long</span></span><br><span class="line">        <span class="keyword">if</span>(l == r) &#123;</span><br><span class="line">            _tree[root] = nums[l<span class="number">-1</span>];</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> mid = l + (r - l)/<span class="number">2</span>;</span><br><span class="line">        <span class="built_in">build</span>(nums, l, mid, <span class="number">2</span>*root);</span><br><span class="line">        <span class="built_in">build</span>(nums, mid+<span class="number">1</span>, r, <span class="number">2</span>*root+<span class="number">1</span>);</span><br><span class="line">        <span class="built_in">maintain</span>(root);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 单点更新 + 区间查询</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">long</span> <span class="type">long</span> root, <span class="type">int</span> ql, <span class="type">int</span> qr)</span> </span>&#123;  <span class="comment">// root 改为 long long</span></span><br><span class="line">        <span class="keyword">if</span>(ql &lt;= l &amp;&amp; r &lt;= qr) &#123;</span><br><span class="line">            <span class="keyword">return</span> _tree[root];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> mid = l + (r - l) /<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span>(qr &lt;= mid) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">query</span>(l, mid, <span class="number">2</span>*root, ql, qr);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ql &gt; mid) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">query</span>(mid+<span class="number">1</span>, r, <span class="number">2</span>*root+<span class="number">1</span>, ql, qr);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">query</span>(l, mid, <span class="number">2</span>*root, ql, mid) + <span class="built_in">query</span>(mid+<span class="number">1</span>, r, <span class="number">2</span>*root+<span class="number">1</span>, mid+<span class="number">1</span>, qr);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">long</span> <span class="type">long</span> root, <span class="type">int</span> idx, <span class="type">int</span> val)</span> </span>&#123;  <span class="comment">// root 改为 long long</span></span><br><span class="line">        <span class="keyword">if</span>(l == r) &#123;</span><br><span class="line">            _tree[root] = val;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> mid = l + (r - l) /<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span>(idx &lt;= mid) &#123;</span><br><span class="line">            <span class="built_in">update</span>(l, mid, <span class="number">2</span>*root, idx, val);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">update</span>(mid+<span class="number">1</span>, r, <span class="number">2</span>*root+<span class="number">1</span>, idx, val);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">maintain</span>(root);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>本质上就是树的后序遍历步骤，首先<strong>处理递归边界</strong>，然后考虑<strong>处理左右节点</strong>，最后考虑<strong>退栈的维护工作</strong>，整体分为三步走流程！</p>
+<h3 id="c-自定义优先队列">c++ 自定义优先队列</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">cmp</span> &#123;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">const</span> Node&amp; a, <span class="type">const</span> Node&amp; b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a.priority &gt; b.priority; <span class="comment">// 按优先级升序排列</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">priority_queue <span class="title">pq</span><span class="params">(Node, vector&lt;Node&gt;, cmp)</span></span>; <span class="comment">// 固定用这种格式进行操作即可</span></span><br></pre></td></tr></table></figure>
+<h2 id="算法类-tip">算法类 tip</h2>
+<h3 id="二分查找常用函数">二分查找常用函数</h3>
+<p>！！！二分查找需要数组有序，如果无序，可以考虑使用线段树。</p>
+<p><code>lower_bound</code></p>
+<ul>
+<li><strong>功能</strong>：返回一个迭代器，指向第一个不小于目标值的元素。</li>
+<li><strong>返回值</strong>：迭代器，如果未找到，则返回 <code>end()</code>。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> it = std::<span class="built_in">lower_bound</span>(vec.<span class="built_in">begin</span>(), vec.<span class="built_in">end</span>(), target);</span><br><span class="line">    <span class="keyword">if</span> (it != vec.<span class="built_in">end</span>()) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;第一个不小于 &quot;</span> &lt;&lt; target &lt;&lt; <span class="string">&quot; 的元素是: &quot;</span> &lt;&lt; *it &lt;&lt; std::endl;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;未找到不小于 &quot;</span> &lt;&lt; target &lt;&lt; <span class="string">&quot; 的元素&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><code>upper_bound</code></p>
+<ul>
+<li>功能：返回一个迭代器，指向第一个大于目标值的元素。</li>
+</ul>
+<p><code>binary_search</code></p>
+<ul>
+<li>功能：检查有序序列中是否存在某个值。</li>
+<li>返回值：返回一个布尔值，表示是否找到目标值。</li>
+</ul>
+<h3 id="回溯算法模板">回溯算法模板</h3>
+<p>示例题型： <a target="_blank" rel="noopener" href="https://leetcode.cn/problems/letter-combinations-of-a-phone-number/?envType=study-plan-v2&amp;envId=top-100-liked">leetcode17 电话号码的字母组合</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="comment">// 每个数字到字母的映射</span></span><br><span class="line">    std::unordered_map&lt;<span class="type">char</span>, std::string&gt; mapping = &#123;</span><br><span class="line">        &#123;<span class="string">&#x27;2&#x27;</span>, <span class="string">&quot;abc&quot;</span>&#125;, &#123;<span class="string">&#x27;3&#x27;</span>, <span class="string">&quot;def&quot;</span>&#125;, &#123;<span class="string">&#x27;4&#x27;</span>, <span class="string">&quot;ghi&quot;</span>&#125;, &#123;<span class="string">&#x27;5&#x27;</span>, <span class="string">&quot;jkl&quot;</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&#x27;6&#x27;</span>, <span class="string">&quot;mno&quot;</span>&#125;, &#123;<span class="string">&#x27;7&#x27;</span>, <span class="string">&quot;pqrs&quot;</span>&#125;, &#123;<span class="string">&#x27;8&#x27;</span>, <span class="string">&quot;tuv&quot;</span>&#125;, &#123;<span class="string">&#x27;9&#x27;</span>, <span class="string">&quot;wxyz&quot;</span>&#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    std::vector&lt;std::string&gt; res;</span><br><span class="line">    std::string sb;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">std::vector&lt;std::string&gt; <span class="title">letterCombinations</span><span class="params">(std::string digits)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (digits.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 从 digits[0] 开始进行回溯</span></span><br><span class="line">        <span class="built_in">backtrack</span>(digits, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 回溯算法主函数</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">backtrack</span><span class="params">(<span class="type">const</span> std::string&amp; digits, <span class="type">int</span> start)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (sb.<span class="built_in">size</span>() == digits.<span class="built_in">size</span>()) &#123;</span><br><span class="line">            <span class="comment">// 到达回溯树底部</span></span><br><span class="line">            res.<span class="built_in">push_back</span>(sb);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 回溯算法框架</span></span><br><span class="line">        <span class="type">char</span> digit = digits[start];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">char</span> c : mapping[digit]) &#123;</span><br><span class="line">            <span class="comment">// 做选择</span></span><br><span class="line">            sb.<span class="built_in">push_back</span>(c);</span><br><span class="line">            <span class="comment">// 递归下一层回溯树</span></span><br><span class="line">            <span class="built_in">backtrack</span>(digits, start + <span class="number">1</span>);</span><br><span class="line">            <span class="comment">// 撤销选择</span></span><br><span class="line">            sb.<span class="built_in">pop_back</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这类问题涉及三个关键点</p>
+<ol>
+<li>
+<p>可选择的元素是否重复，要考虑使用 used 数组进行去重操作</p>
+</li>
+<li>
+<p>可选择的元素是否支持重复选择，递归进入回溯函数的时候，start 是否需要 +1</p>
+</li>
+<li>
+<p>剪枝逻辑问题，一般此类题所有的变式都难在剪枝的逻辑处理</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="通用迭代法模拟递归">通用迭代法模拟递归</h3>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/n-ary-tree-preorder-traversal/description/">N叉树的前序遍历</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">preorder</span><span class="params">(Node* root)</span> </span>&#123;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; ans;</span><br><span class="line">        stack&lt;pair&lt;<span class="type">int</span>, Node*&gt;&gt; stk;</span><br><span class="line">        stk.<span class="built_in">push</span>(&#123;<span class="number">0</span>, root&#125;);</span><br><span class="line">        <span class="keyword">while</span> (!stk.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> [loc, node] = stk.<span class="built_in">top</span>();</span><br><span class="line">            stk.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">if</span> (!node) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="comment">// loc 模拟栈帧状态，为 0 时表示访问当前节点，为 1 时表示处理当前节点的子节点</span></span><br><span class="line">            <span class="keyword">if</span> (loc == <span class="number">0</span>) &#123;</span><br><span class="line">                ans.<span class="built_in">push_back</span>(node-&gt;val);</span><br><span class="line">                stk.<span class="built_in">push</span>(&#123;<span class="number">1</span>, node&#125;);</span><br><span class="line">            &#125; <span class="built_in">elseif</span> (loc == <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">// 这里采用逆序入栈，利用栈的先进后出特性，保证从左到右进行处理！</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">auto</span> it = node-&gt;children.<span class="built_in">rbegin</span>(); it != node-&gt;children.<span class="built_in">rend</span>(); it++) &#123;</span><br><span class="line">                    stk.<span class="built_in">push</span>(&#123;<span class="number">0</span>, *it&#125;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>之前没有见到过的使用状态变量迭代法模拟递归的方法，记录一下。</p>
+<p>核心思路为：使用状态变量模拟递归的不同状态，同时对子节点进行逆序入栈，从而保障左子树 -&gt; 右子树的顺序！</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io">Bo Han</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io/2025/04/02/algo/algorithm-notebook/">https://lingwu-hb.github.io/2025/04/02/algo/algorithm-notebook/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/algorithm/">algorithm</a></div><div class="post-share"><div class="social-share" data-image="/img/yaojie.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/03/24/AICache/ocf-lock-analysis/" title="ocf lock analysis"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">ocf lock analysis</div></div><div class="info-2"><div class="info-item-1">锁机制分析 OCF 中设计了多种多样的锁来进行并发控制。最常见的为元数据锁和缓存行锁。 元数据锁 缓存相关的元数据，包括缓存映射信息、缓存哈希表数据以及缓存状态信息等。 123456// 获取元数据的读锁，后续读取元数据信息ocf_hb_req_prot_lock_rd(req);ocf_hb_req_prot_unlock_rd(req);// 锁升级，先释放掉所有的读锁，然后再拿去写锁。顺序拿取，防止死锁ocf_hb_req_prot_lock_upgrade(req);ocf_hb_req_prot_unlock_wr(req); 缓存行锁 缓存行锁针对的粒度为缓存行，并且使用了分级获取的方式 首先尝试快速获取锁，如果快速获取锁失败，再慢速获取锁。 快速获取是同步进行获取，不会阻塞，一旦有一个缓存行获取失败，直接退出。 慢速获取会尝试获取每一个锁，如果获取不到，将会考虑将其放置到等待队列，直到成功获取锁才执行回调函数。（代码片段如下） 1234567891011int ocf_alock_lock_rd(struct ocf_alock *alock,		struct...</div></div></div></a><a class="pagination-related" href="/2025/05/16/AICache/Decision-Tree-Addmission-Policy/" title="Decision Tree Addmission Policy"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">Decision Tree Addmission Policy</div></div><div class="info-2"><div class="info-item-1">   OTAE: Decision Tree Based Cache Admission Policy 📋 Overview 项目地址 OTAE (Optimized Tree-based Admission Engine) is an intelligent cache admission policy that uses decision trees to predict whether a cache block should be admitted to the cache. It aims to improve cache efficiency by learning from historical access patterns and making smart admission decisions. 🗂️ Project Structure 12345678910111213141516171819otae/├── feature/                   # Feature extraction│   ├──...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-04</div><div class="info-item-2">RL paper survey</div></div><div class="info-2"><div class="info-item-1">1. ArtMem ArtMem：Adaptive Migration in Reinforcement Learning-Enabled Tiered Memory 背景： 内存系统只靠 DRAM 不足，因此引入 PM 和基于 CXL 的额外内存，形成快慢速的分层内存系统。 但现有分层内存系统中的页面迁移策略不够...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">算法笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB-tip"><span class="toc-number">1.1.</span> <span class="toc-text">数据结构类 tip</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#string-%E7%B1%BB%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.1.</span> <span class="toc-text">string 类常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vector"><span class="toc-number">1.1.2.</span> <span class="toc-text">vector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E6%AE%B5%E6%A0%91%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.1.3.</span> <span class="toc-text">线段树模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97"><span class="toc-number">1.1.4.</span> <span class="toc-text">c++ 自定义优先队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E7%B1%BB-tip"><span class="toc-number">1.2.</span> <span class="toc-text">算法类 tip</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">二分查找常用函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.2.2.</span> <span class="toc-text">回溯算法模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E8%BF%AD%E4%BB%A3%E6%B3%95%E6%A8%A1%E6%8B%9F%E9%80%92%E5%BD%92"><span class="toc-number">1.2.3.</span> <span class="toc-text">通用迭代法模拟递归</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/09/AICache/thirdStage/Mithril-intro/" title="Mithril intro">Mithril intro</a><time datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey">RL paper survey</a><time datetime="2025-07-04T02:03:02.000Z" title="Created 2025-07-04 10:03:02">2025-07-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

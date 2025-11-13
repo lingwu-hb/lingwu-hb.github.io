@@ -1,0 +1,492 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Mithril intro | Hexo</title><meta name="author" content="Bo Han"><meta name="copyright" content="Bo Han"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Mithril 算法数据结构 rec_mining_t 数据结构 rec_mining_t 是 Mithril 算法中用于记录和挖掘访问模式的核心数据结构，它包含以下关键组件： 主要组件    组件 类型 描述     hashtable GHashTable* 哈希表，存储块相关信息。键为块号，值为行号（指向记录表或挖掘表）。- 正值：指向记录表- 负值：指向挖掘表   recording_ta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mithril intro">
+<meta property="og:url" content="https://lingwu-hb.github.io/2025/07/09/AICache/thirdStage/Mithril-intro/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Mithril 算法数据结构 rec_mining_t 数据结构 rec_mining_t 是 Mithril 算法中用于记录和挖掘访问模式的核心数据结构，它包含以下关键组件： 主要组件    组件 类型 描述     hashtable GHashTable* 哈希表，存储块相关信息。键为块号，值为行号（指向记录表或挖掘表）。- 正值：指向记录表- 负值：指向挖掘表   recording_ta">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://lingwu-hb.github.io/img/yaojie.jpg">
+<meta property="article:published_time" content="2025-07-09T08:40:28.000Z">
+<meta property="article:modified_time" content="2025-11-04T11:50:50.886Z">
+<meta property="article:author" content="Bo Han">
+<meta property="article:tag" content="prefetch algo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lingwu-hb.github.io/img/yaojie.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mithril intro",
+  "url": "https://lingwu-hb.github.io/2025/07/09/AICache/thirdStage/Mithril-intro/",
+  "image": "https://lingwu-hb.github.io/img/yaojie.jpg",
+  "datePublished": "2025-07-09T08:40:28.000Z",
+  "dateModified": "2025-11-04T11:50:50.886Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Bo Han",
+      "url": "https://lingwu-hb.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://lingwu-hb.github.io/2025/07/09/AICache/thirdStage/Mithril-intro/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Mithril intro',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.2.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Hexo</span></a><a class="nav-page-title" href="/"><span class="site-name">Mithril intro</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Mithril intro</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-11-04T11:50:50.886Z" title="Updated 2025-11-04 19:50:50">2025-11-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/data-storage/">data storage</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Mithril-算法数据结构">Mithril 算法数据结构</h1>
+<h2 id="rec-mining-t-数据结构">rec_mining_t 数据结构</h2>
+<p><code>rec_mining_t</code> 是 Mithril 算法中用于记录和挖掘访问模式的核心数据结构，它包含以下关键组件：</p>
+<h3 id="主要组件">主要组件</h3>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hashtable</code></td>
+<td><code>GHashTable*</code></td>
+<td>哈希表，存储块相关信息。键为块号，值为行号（指向记录表或挖掘表）。<br>- 正值：指向记录表<br>- 负值：指向挖掘表</td>
+</tr>
+<tr>
+<td><code>recording_table</code></td>
+<td><code>gint64*</code></td>
+<td>记录表，结构为 N*(min_support/4+1) 数组。<br>- 其中 4 是一个 64 位整数中存储的时间戳数量<br>- N 是记录表中的条目数<br>- 加 1 是为了标签</td>
+</tr>
+<tr>
+<td><code>rtable_row_len</code></td>
+<td><code>gint8</code></td>
+<td>记录表的行长度，当前为 min_support/4 + 1</td>
+</tr>
+<tr>
+<td><code>n_rows_in_rtable</code></td>
+<td><code>gint64</code></td>
+<td>记录表中的行数，决定记录表可以存储多少块</td>
+</tr>
+<tr>
+<td><code>rtable_cur_row</code></td>
+<td><code>gint64</code></td>
+<td>记录表中的当前行号</td>
+</tr>
+<tr>
+<td><code>mtable_row_len</code></td>
+<td><code>gint8</code></td>
+<td>挖掘表的行长度，当前为 max_support/4 + 1</td>
+</tr>
+<tr>
+<td><code>mining_table</code></td>
+<td><code>GArray*</code></td>
+<td>挖掘表位置，使用 GArray 以便快速追加</td>
+</tr>
+<tr>
+<td><code>n_avail_mining</code></td>
+<td><code>gint</code></td>
+<td>计数器，表示挖掘表中有多少对象/块已准备好进行挖掘</td>
+</tr>
+</tbody>
+</table>
+<h3 id="设计理念">设计理念</h3>
+<p>记录表（recording table）和挖掘表（mining table）是两种不同阶段的数据结构：</p>
+<ol>
+<li>
+<p><strong>记录表</strong>：初始阶段收集块访问信息</p>
+<ul>
+<li>当块被访问次数不足以成为频繁块时，其信息存储在记录表中</li>
+<li>如果块在记录表中停留太久，说明它是罕见的，没有积累足够的访问次数迁移到挖掘表</li>
+<li>因此，为记录表分配过多空间并不实用</li>
+</ul>
+</li>
+<li>
+<p><strong>挖掘表</strong>：存储频繁访问的块，用于模式挖掘</p>
+<ul>
+<li>当块的访问次数达到 min_support 阈值时，从记录表迁移到挖掘表</li>
+<li>挖掘表中的数据用于识别关联访问模式</li>
+</ul>
+</li>
+</ol>
+<h3 id="时间戳存储机制">时间戳存储机制</h3>
+<p>时间戳在 64 位整数中按以下格式存储：</p>
+<ul>
+<li>前 4 位：时间戳数量（0~4）</li>
+<li>每 15 位：一个时间戳
+<ul>
+<li>第一个时间戳存储在 4-18 位</li>
+<li>第二个时间戳存储在 19-33 位</li>
+<li>第三个时间戳存储在 34-48 位</li>
+<li>第四个时间戳存储在 49-63 位</li>
+</ul>
+</li>
+</ul>
+<h2 id="记录表（recording-table）结构详解">记录表（recording_table）结构详解</h2>
+<p>记录表是 Mithril 算法中用于初始收集访问模式的关键数据结构。它的内存结构为 <code>N*(min_support/4+1)</code> 的二维数组，其中：</p>
+<h3 id="内存分配与布局">内存分配与布局</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 set_Mithril_params 函数中初始化记录表</span></span><br><span class="line">rmtable-&gt;n_rows_in_rtable = (gint64)(cache_size * RECORDING_TABLE_MAXIMAL /</span><br><span class="line">                         ((<span class="type">int</span>)<span class="built_in">ceil</span>((<span class="type">double</span>)Mithril_params-&gt;min_support / (<span class="type">double</span>)<span class="number">2</span>) * <span class="number">2</span> + <span class="number">8</span> + <span class="number">4</span>));</span><br><span class="line"><span class="keyword">if</span> (rmtable-&gt;n_rows_in_rtable &lt; <span class="number">1000</span>) &#123;</span><br><span class="line">  rmtable-&gt;n_rows_in_rtable = <span class="number">1000</span>;</span><br><span class="line">&#125;</span><br><span class="line">rmtable-&gt;rtable_row_len = (gint)<span class="built_in">ceil</span>((<span class="type">double</span>)Mithril_params-&gt;min_support / (<span class="type">double</span>)<span class="number">4</span>) + <span class="number">1</span>;</span><br><span class="line">rmtable-&gt;recording_table = g_new0(gint64, rmtable-&gt;n_rows_in_rtable * rmtable-&gt;rtable_row_len);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>
+<p><strong>行数（N）计算</strong>：</p>
+<ul>
+<li>根据缓存大小乘以 <code>RECORDING_TABLE_MAXIMAL</code>（默认值为 0.02，即缓存大小的 2%）</li>
+<li>除以每行所需的字节数来确定可以存储的行数</li>
+<li>最小行数为 1000，确保小缓存也有足够的记录空间</li>
+</ul>
+</li>
+<li>
+<p><strong>行长度计算</strong>：</p>
+<ul>
+<li><code>rtable_row_len = ceil(min_support/4) + 1</code></li>
+<li>其中 4 表示每个 64 位整数可以存储的时间戳数量</li>
+<li>加 1 是为第一个元素预留空间，用于存储块ID（obj_id）</li>
+</ul>
+</li>
+</ol>
+<h3 id="记录表行结构">记录表行结构</h3>
+<p>每行在记录表中的布局如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">| 位置[0]  | 位置[1]        | 位置[2]        | ... | 位置[rtable_row_len-1] |</span><br><span class="line">| 块ID     | 时间戳组(0-4个) | 时间戳组(0-4个) | ... | 时间戳组(0-4个)        |</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>位置[0]</strong>：存储块ID（obj_id），用于标识这一行记录的是哪个块</li>
+<li><strong>位置[1]到位置[rtable_row_len-1]</strong>：每个位置存储一个 64 位整数，每个整数最多可以存储 4 个时间戳</li>
+</ul>
+<h3 id="时间戳添加机制">时间戳添加机制</h3>
+<p>当一个块被访问时，Mithril 会在记录表中添加一个时间戳：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 _Mithril_record_entry 函数中</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; rmtable-&gt;rtable_row_len; i++) &#123;</span><br><span class="line">  timestamps_length += NUM_OF_TS(row_in_rtable[i]);</span><br><span class="line">  <span class="keyword">if</span> (NUM_OF_TS(row_in_rtable[i]) &lt; <span class="number">4</span>) &#123;</span><br><span class="line">    row_in_rtable[i] = ADD_TS(row_in_rtable[i], Mithril_params-&gt;ts);</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>扫描行中的每个 64 位整数，查找还没存满 4 个时间戳的整数</li>
+<li>使用 <code>ADD_TS</code> 宏添加当前时间戳到这个整数中</li>
+<li>如果一行中的时间戳总数达到 <code>min_support</code>，说明这个块已经足够频繁，会被迁移到挖掘表</li>
+</ol>
+<h3 id="记录表填充示例">记录表填充示例</h3>
+<p>假设 <code>min_support = 10</code>，则 <code>rtable_row_len = ceil(10/4) + 1 = 4</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">| 位置[0]  | 位置[1]    | 位置[2]    | 位置[3]    |</span><br><span class="line">| 块ID=123 | 4个时间戳  | 4个时间戳  | 2个时间戳  |</span><br></pre></td></tr></table></figure>
+<p>这一行表示块ID为123的块已经被访问了10次，其中：</p>
+<ul>
+<li>位置[1]存储了前4次访问的时间戳</li>
+<li>位置[2]存储了接下来4次访问的时间戳</li>
+<li>位置[3]存储了最后2次访问的时间戳</li>
+</ul>
+<p>当时间戳数量达到 <code>min_support</code> 时，这个块会从记录表迁移到挖掘表，用于进一步的模式挖掘。</p>
+<h1 id="Mithril-流程">Mithril 流程</h1>
+<h2 id="保存到记录表">保存到记录表</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril.c Line 302 - Line 308</span></span><br><span class="line"><span class="comment">// 1. record entry when rec_trigger is each_req.</span></span><br><span class="line"><span class="comment">// 2. record entry when (rec_trigger is miss or miss_evict (in other words,</span></span><br><span class="line"><span class="comment">// !evict)) &amp;&amp; !hit</span></span><br><span class="line"><span class="keyword">if</span> ((Mithril_params-&gt;rec_trigger == each_req) ||</span><br><span class="line">    (Mithril_params-&gt;rec_trigger != evict &amp;&amp; !hit)) &#123;</span><br><span class="line">  _Mithril_record_entry(cache, req);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>Mithril_params-&gt;rec_trigger</code> 枚举类型，决定了什么时候记录 IO。共有四种类型：miss/evict/miss_evict/each_req</p>
+<h2 id="记录表到挖掘表">记录表到挖掘表</h2>
+<p>Mithril 在块的访问次数（时间戳数量）达到 <code>min_support</code> 时，会将块从记录表迁移到挖掘表：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril.c 第 976-985 行</span></span><br><span class="line"><span class="keyword">if</span> (timestamps_length == Mithril_params-&gt;min_support - <span class="number">1</span>) &#123;</span><br><span class="line">  <span class="comment">/* time to move to mining table */</span></span><br><span class="line">  <span class="comment">// gint64 *array_ele = malloc(sizeof(gint64) *</span></span><br><span class="line">  <span class="comment">// rmtable-&gt;mtable_row_len);</span></span><br><span class="line">  gint64 array_ele[rmtable-&gt;mtable_row_len];</span><br><span class="line">  <span class="built_in">memcpy</span>(array_ele, row_in_rtable,</span><br><span class="line">         <span class="keyword">sizeof</span>(TS_REPRESENTATION) * rmtable-&gt;rtable_row_len);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ... 将行从记录表拷贝到挖掘表 ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这一过程的关键步骤包括：</p>
+<ol>
+<li><strong>检测访问频率阈值</strong>：当一个块在记录表中的时间戳数量达到 <code>min_support - 1</code> 时，下一次访问会触发迁移</li>
+<li><strong>数据复制与扩展</strong>：从记录表复制现有数据到挖掘表，并为可能的额外时间戳预留空间</li>
+<li><strong>哈希表索引更新</strong>：更新哈希表中块ID到表位置的映射，使用负值标记其在挖掘表中的位置</li>
+<li><strong>空间回收</strong>：清空记录表中迁移出的条目，以便重用空间</li>
+</ol>
+<p>当挖掘表中的条目数量达到阈值时，会触发挖掘过程：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril.c 第 1068-1072 行</span></span><br><span class="line"><span class="keyword">if</span> (rmtable-&gt;n_avail_mining &gt;= Mithril_params-&gt;mtable_size ||</span><br><span class="line">    (Mithril_params-&gt;min_support == <span class="number">1</span> &amp;&amp;</span><br><span class="line">     rmtable-&gt;n_avail_mining &gt; Mithril_params-&gt;mining_threshold / <span class="number">8</span>)) &#123;</span><br><span class="line">  _Mithril_mining(cache);</span><br><span class="line">  rmtable-&gt;n_avail_mining = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="挖掘表到预取表">挖掘表到预取表</h2>
+<p>挖掘表积累足够条目后，Mithril 会执行模式挖掘，寻找块之间的访问关联：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril.c 第 1156-1208 行</span></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; (<span class="type">long</span>)rmtable-&gt;mining_table-&gt;len - <span class="number">1</span>; i++) &#123;</span><br><span class="line">  item1 = GET_ROW_IN_MTABLE(Mithril_params, i);</span><br><span class="line">  num_of_ts1 = _Mithril_get_total_num_of_ts(item1, rmtable-&gt;mtable_row_len);</span><br><span class="line">  first_flag = TRUE;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (j = i + <span class="number">1</span>; j &lt; (<span class="type">long</span>)rmtable-&gt;mining_table-&gt;len; j++) &#123;</span><br><span class="line">    item2 = GET_ROW_IN_MTABLE(Mithril_params, j);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果第一个时间戳差距过大，就跳过</span></span><br><span class="line">    <span class="keyword">if</span> (GET_NTH_TS(item2, <span class="number">1</span>) - GET_NTH_TS(item1, <span class="number">1</span>) &gt;</span><br><span class="line">        Mithril_params-&gt;lookahead_range) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... 分析时间戳是否符合关联条件 ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (associated_flag) &#123;</span><br><span class="line">      <span class="comment">// 将关联的块添加到预取表</span></span><br><span class="line">      _Mithril_add_to_prefetch_table(cache, GINT_TO_POINTER(item1[<span class="number">0</span>]),</span><br><span class="line">                                   GINT_TO_POINTER(item2[<span class="number">0</span>]));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>挖掘的核心步骤：</p>
+<ol>
+<li><strong>排序和比对</strong>：先按时间戳排序挖掘表，然后依次比较不同块的访问模式</li>
+<li><strong>时间相关性判断</strong>：计算时间戳之间的差距，如果在 <code>lookahead_range</code> 范围内，可能存在关联</li>
+<li><strong>置信度检查</strong>：通过对比多个时间戳，确认关联不是偶然的，错误次数不超过 <code>confidence</code> 阈值</li>
+<li><strong>构建预取关系</strong>：将发现的关联添加到预取表中，作为未来预取决策的依据</li>
+</ol>
+<p>预取表的构建机制确保了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril.c 第 1301-1324 行</span></span><br><span class="line"><span class="comment">// 构建预取表项</span></span><br><span class="line">Mithril_params-&gt;ptable_array[dim1][dim2 + <span class="number">1</span>] = GPOINTER_TO_INT(gp2);</span><br><span class="line">Mithril_params-&gt;ptable_array[dim1][dim2] = GPOINTER_TO_INT(gp1);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新哈希表索引</span></span><br><span class="line">g_hash_table_insert(Mithril_params-&gt;prefetch_hashtable, gp1,</span><br><span class="line">                    GINT_TO_POINTER(Mithril_params-&gt;ptable_cur_row));</span><br></pre></td></tr></table></figure>
+<p>当缓存接收到一个请求时，Mithril 会查找预取表进行预取：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril.c 第 390-405 行</span></span><br><span class="line">gint prefetch_table_index = GPOINTER_TO_INT(g_hash_table_lookup(</span><br><span class="line">    Mithril_params-&gt;prefetch_hashtable, GINT_TO_POINTER(req-&gt;obj_id)));</span><br><span class="line"></span><br><span class="line"><span class="comment">// ... 获取预取表中的预取项 ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (prefetch_table_index) &#123;</span><br><span class="line">  <span class="comment">// 从预取表获取关联块并进行预取</span></span><br><span class="line">  <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; Mithril_params-&gt;pf_list_size + <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (Mithril_params-&gt;ptable_array[dim1][dim2 + i] == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    new_req-&gt;obj_id = Mithril_params-&gt;ptable_array[dim1][dim2 + i];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ... 执行实际预取操作 ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="流程图示">流程图示</h2>
+<img src="\img\Mithril示意图.png" alt="Mithril示意图"/>
+<p>最上面是简化的记录表</p>
+<p>左侧是挖掘表</p>
+<p>最右侧是判断两个请求是否相关联。如果相关联，将其存入到预取表（哈希表）。预取表中，key -&gt; 触发预取的请求，value -&gt; 与 key 相关联的请求。</p>
+<h3 id="为什么过滤超高频块？">为什么过滤超高频块？</h3>
+<blockquote>
+<p>此部分为补充内容</p>
+</blockquote>
+<p>在 Mithril 算法中，当一个块在挖掘表中的访问次数超过 <code>max_support</code> 时，该块会被从挖掘表中删除。这种设计看似违反直觉（因为高频访问的块理应更重要），但实际上有深思熟虑的考量：</p>
+<ol>
+<li>过滤噪音和普遍模式</li>
+</ol>
+<ul>
+<li><strong>识别无信息价值的常见块</strong>：访问极其频繁的块通常是系统文件、元数据或程序必备组件</li>
+<li><strong>降低关联分析的干扰</strong>：这些块几乎在任何情况下都会被访问，与其他块的关联性不具特殊意义</li>
+<li><strong>提高模式质量</strong>：类似文本分析中过滤掉&quot;the&quot;、&quot;a&quot;等常见词，删除&quot;太常见&quot;的块可降低挖掘中的噪音</li>
+</ul>
+<ol start="2">
+<li>提高关联模式的价值</li>
+</ol>
+<ul>
+<li><strong>聚焦有价值的模式</strong>：Mithril 的核心目标是发现有预测价值的访问模式关联</li>
+<li><strong>中频块的优势</strong>：介于 <code>min_support</code> 和 <code>max_support</code> 之间的中等频率块往往形成更有意义的模式</li>
+<li><strong>避免低质量关联</strong>：超高频块与太多其他块都有关联，这些关联通常不够特异，预测价值有限</li>
+</ul>
+<ol start="3">
+<li>资源和性能优化</li>
+</ol>
+<ul>
+<li><strong>内存效率</strong>：保留和处理超高频块会占用宝贵的内存和计算资源</li>
+<li><strong>聚焦关键区间</strong>：将资源集中于频率适中的块，可提高整体预测效率</li>
+<li><strong>降低计算复杂度</strong>：挖掘算法的复杂度通常与考虑的项目数量相关，删除超高频项可显著减轻计算负担</li>
+</ul>
+<ol start="4">
+<li>数据挖掘中的精准平衡</li>
+</ol>
+<p>这种设计体现了数据挖掘中的一个关键原则：<strong>并非所有频繁出现的模式都有价值</strong>。通过设置 <code>min_support</code> 和 <code>max_support</code> 两个阈值，Mithril 算法可以专注于&quot;恰到好处&quot;的频率区间，提高预测的质量和效率。这是频繁模式挖掘算法中常见的优化技术，平衡了覆盖率和精确度。</p>
+<h2 id="重要参数">重要参数</h2>
+<p>Mithril 算法的关键参数及其影响：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min_support</code></td>
+<td>2</td>
+<td>最小支持度，决定一个块多少次访问后从记录表迁移到挖掘表</td>
+</tr>
+<tr>
+<td><code>max_support</code></td>
+<td>8</td>
+<td>最大支持度，超过此值的块会被从挖掘表中删除，避免过度频繁的块干扰模式挖掘</td>
+</tr>
+<tr>
+<td><code>lookahead_range</code></td>
+<td>20</td>
+<td>时间戳比较范围，决定多大时间差内的访问被视为关联</td>
+</tr>
+<tr>
+<td><code>confidence</code></td>
+<td>1</td>
+<td>置信度，表示可接受的时间戳不匹配次数，影响关联发现的容错性</td>
+</tr>
+<tr>
+<td><code>pf_list_size</code></td>
+<td>2</td>
+<td>每个块关联的预取对象最大数量，影响预取广度</td>
+</tr>
+<tr>
+<td><code>rec_trigger</code></td>
+<td>each_req</td>
+<td>记录触发器，决定何时记录块访问（miss/evict/miss_evict/each_req）</td>
+</tr>
+<tr>
+<td><code>mining_threshold</code></td>
+<td>5120</td>
+<td>挖掘阈值，决定记录表达到多少条目时触发挖掘过程</td>
+</tr>
+<tr>
+<td><code>mtable_size</code></td>
+<td>mining_threshold / min_support)</td>
+<td>记录表的最大长度限制</td>
+</tr>
+</tbody>
+</table>
+<p>这些参数共同影响 Mithril 的预取性能与资源消耗，可以根据不同的工作负载特性进行调整，以优化命中率和资源利用。例如：</p>
+<ul>
+<li>频繁变化的工作负载可能需要较小的 <code>lookahead_range</code></li>
+<li>访问模式明显的工作负载可以使用较大的 <code>confidence</code> 提高容错性</li>
+<li>资源受限环境可以降低 <code>pf_list_size</code> 减少预取开销</li>
+</ul>
+<h1 id="Mithril-改进">Mithril 改进</h1>
+<p>主要针对预取长度做出针对性改进。</p>
+<hr>
+<h2 id="Mithril-l">Mithril_l</h2>
+<p>Mithril_l 针对对象大小不等的场景进行了优化。<br>
+与原始 Mithril 只支持固定大小对象不同，Mithril_l 通过引入 <code>cache_size_map</code> 哈希表，记录每个对象的实际大小。在预取时，会根据对象实际大小动态决定需要预取多少个最小单位对象（obj_size），从而实现对变长对象的完整预取。<br>
+这种机制特别适合文件系统、分布式存储等对象大小不一的应用场景，能够有效提升预取的准确性和缓存利用率。</p>
+<p><strong>关键代码片段：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril_l.c 预取核心</span></span><br><span class="line"><span class="type">int</span> num = GPOINTER_TO_INT(g_hash_table_lookup(Mithril_l_params-&gt;cache_size_map, GINT_TO_POINTER(new_req-&gt;obj_id))) / req-&gt;obj_size;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; num; j++, new_req-&gt;obj_id++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (cache-&gt;find(cache, new_req, <span class="literal">false</span>)) <span class="keyword">continue</span>;</span><br><span class="line">    <span class="keyword">while</span> ((<span class="type">long</span>)cache-&gt;get_occupied_byte(cache) + new_req-&gt;obj_size + cache-&gt;obj_md_size &gt; (<span class="type">long</span>)cache-&gt;cache_size) &#123;</span><br><span class="line">        cache-&gt;evict(cache, new_req);</span><br><span class="line">    &#125;</span><br><span class="line">    cache-&gt;insert(cache, new_req);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>代码分析：</strong><br>
+这段代码首先通过 <code>cache_size_map</code> 查找当前对象的实际大小，并计算出需要预取的小对象数量 <code>num</code>。随后，循环 <code>num</code> 次，每次将 <code>new_req-&gt;obj_id</code> 递增，依次将属于同一大对象的所有小块插入缓存。这样可以确保变长对象被完整预取，提升了缓存的利用率和预取的准确性。</p>
+<hr>
+<h2 id="Mithril-adapt">Mithril_adapt</h2>
+<p>Mithril_adapt 在 Mithril_l 的基础上进一步引入了自适应机制。<br>
+其核心思想是：根据实际运行时的预取命中率和覆盖率，动态调整每次预取的对象数量（<code>adapt_length</code>）。<br>
+具体做法为：每隔一段时间（<code>tune_interval</code>），统计预取命中和未命中情况，若预取效果提升，则增加预取长度（更激进）；若效果变差，则减少预取长度（更保守）。<br>
+这种自适应调整机制能够根据访问模式的变化自动优化预取策略，兼顾了预取的覆盖率和准确率，适用于访问模式动态变化的复杂场景。</p>
+<p><strong>关键代码片段：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril_adapt.c 预取核心</span></span><br><span class="line"><span class="type">int</span> num = Mithril_adapt_params-&gt;adapt_length;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; num; j++, new_req-&gt;obj_id++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (cache-&gt;find(cache, new_req, <span class="literal">false</span>)) <span class="keyword">continue</span>;</span><br><span class="line">    <span class="keyword">while</span> ((<span class="type">long</span>)cache-&gt;get_occupied_byte(cache) + new_req-&gt;obj_size + cache-&gt;obj_md_size &gt; (<span class="type">long</span>)cache-&gt;cache_size) &#123;</span><br><span class="line">        cache-&gt;evict(cache, new_req);</span><br><span class="line">    &#125;</span><br><span class="line">    cache-&gt;insert(cache, new_req);</span><br><span class="line">    Mithril_adapt_params-&gt;total_prefetch++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>代码分析：</strong><br>
+这里的 <code>adapt_length</code> 决定了每次预取的对象数量。每次预取时，都会连续插入 <code>adapt_length</code> 个对象到缓存中，并统计本次预取的总次数。通过动态调整 <code>adapt_length</code>，可以让预取策略根据实际效果自动变得更激进或更保守。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Mithril_adapt.c 自适应调整逻辑</span></span><br><span class="line"><span class="keyword">if</span> (cache-&gt;n_req % Mithril_adapt_params-&gt;tune_interval == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="type">float</span> accuracy_coverage = (<span class="type">float</span>)Mithril_adapt_params-&gt;prefetch_hit / Mithril_adapt_params-&gt;total_prefetch +</span><br><span class="line">                              (<span class="type">float</span>)Mithril_adapt_params-&gt;prefetch_hit / Mithril_adapt_params-&gt;base_miss;</span><br><span class="line">    <span class="keyword">if</span> (accuracy_coverage &gt; Mithril_adapt_params-&gt;prev_accuracy_coverage) &#123;</span><br><span class="line">        Mithril_adapt_params-&gt;adapt_length += Mithril_adapt_params-&gt;delta_length;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Mithril_adapt_params-&gt;adapt_length -= Mithril_adapt_params-&gt;delta_length;</span><br><span class="line">    &#125;</span><br><span class="line">    Mithril_adapt_params-&gt;adapt_length = MAX(<span class="number">1</span>, MIN(<span class="number">255</span>, Mithril_adapt_params-&gt;adapt_length));</span><br><span class="line">    Mithril_adapt_params-&gt;prev_accuracy_coverage = accuracy_coverage;</span><br><span class="line">    Mithril_adapt_params-&gt;prefetch_hit = <span class="number">0</span>;</span><br><span class="line">    Mithril_adapt_params-&gt;total_prefetch = <span class="number">0</span>;</span><br><span class="line">    Mithril_adapt_params-&gt;base_miss = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>代码分析：</strong><br>
+这段代码每隔 <code>tune_interval</code> 个请求就会触发一次自适应调整。它通过统计预取命中率和覆盖率的加权和（<code>accuracy_coverage</code>），与上一个周期的效果进行对比。如果效果提升，则增加预取长度（<code>adapt_length</code>），否则减少。<code>adapt_length</code> 被限制在合理范围内，防止过大或过小。每次调整后，相关统计量会被清零，进入下一个自适应周期。</p>
+<hr>
+<p>通过上述代码和分析可以看出，Mithril_l 解决了变长对象的预取问题，而 Mithril_adapt 则进一步实现了预取激进度的自适应优化，使得预取策略能够根据实际运行效果动态调整，更加智能和高效。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io">Bo Han</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://lingwu-hb.github.io/2025/07/09/AICache/thirdStage/Mithril-intro/">https://lingwu-hb.github.io/2025/07/09/AICache/thirdStage/Mithril-intro/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/prefetch-algo/">prefetch algo</a></div><div class="post-share"><div class="social-share" data-image="/img/yaojie.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">RL paper survey</div></div><div class="info-2"><div class="info-item-1">1. ArtMem ArtMem：Adaptive Migration in Reinforcement Learning-Enabled Tiered Memory 背景： 内存系统只靠 DRAM 不足，因此引入 PM 和基于 CXL 的额外内存，形成快慢速的分层内存系统。 但现有分层内存系统中的页面迁移策略不够...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/yaojie.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Bo Han</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">35</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mithril-%E7%AE%97%E6%B3%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">Mithril 算法数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#rec-mining-t-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">rec_mining_t 数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%BB%84%E4%BB%B6"><span class="toc-number">1.1.1.</span> <span class="toc-text">主要组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">设计理念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%88%B3%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">时间戳存储机制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E8%A1%A8%EF%BC%88recording-table%EF%BC%89%E7%BB%93%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.2.</span> <span class="toc-text">记录表（recording_table）结构详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%B8%83%E5%B1%80"><span class="toc-number">1.2.1.</span> <span class="toc-text">内存分配与布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E8%A1%A8%E8%A1%8C%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.2.</span> <span class="toc-text">记录表行结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%88%B3%E6%B7%BB%E5%8A%A0%E6%9C%BA%E5%88%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">时间戳添加机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E8%A1%A8%E5%A1%AB%E5%85%85%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">记录表填充示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mithril-%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">Mithril 流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E5%88%B0%E8%AE%B0%E5%BD%95%E8%A1%A8"><span class="toc-number">2.1.</span> <span class="toc-text">保存到记录表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E8%A1%A8%E5%88%B0%E6%8C%96%E6%8E%98%E8%A1%A8"><span class="toc-number">2.2.</span> <span class="toc-text">记录表到挖掘表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%96%E6%8E%98%E8%A1%A8%E5%88%B0%E9%A2%84%E5%8F%96%E8%A1%A8"><span class="toc-number">2.3.</span> <span class="toc-text">挖掘表到预取表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE%E7%A4%BA"><span class="toc-number">2.4.</span> <span class="toc-text">流程图示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%87%E6%BB%A4%E8%B6%85%E9%AB%98%E9%A2%91%E5%9D%97%EF%BC%9F"><span class="toc-number">2.4.1.</span> <span class="toc-text">为什么过滤超高频块？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E5%8F%82%E6%95%B0"><span class="toc-number">2.5.</span> <span class="toc-text">重要参数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mithril-%E6%94%B9%E8%BF%9B"><span class="toc-number">3.</span> <span class="toc-text">Mithril 改进</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mithril-l"><span class="toc-number">3.1.</span> <span class="toc-text">Mithril_l</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mithril-adapt"><span class="toc-number">3.2.</span> <span class="toc-text">Mithril_adapt</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/09/AICache/thirdStage/Mithril-intro/" title="Mithril intro">Mithril intro</a><time datetime="2025-07-09T08:40:28.000Z" title="Created 2025-07-09 16:40:28">2025-07-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/04/AICache/thirdStage/RL-paper-survey/" title="RL paper survey">RL paper survey</a><time datetime="2025-07-04T02:03:02.000Z" title="Created 2025-07-04 10:03:02">2025-07-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/tsPrefetchus/" title="tsPrefetchus">tsPrefetchus</a><time datetime="2025-07-03T06:21:16.000Z" title="Created 2025-07-03 14:21:16">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/03/AICache/thirdStage/cache-and-request-contrast/" title="cache and request contrast">cache and request contrast</a><time datetime="2025-07-03T01:20:11.000Z" title="Created 2025-07-03 09:20:11">2025-07-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/01/AICache/thirdStage/spdk/" title="spdk">spdk</a><time datetime="2025-07-01T01:55:48.000Z" title="Created 2025-07-01 09:55:48">2025-07-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Bo Han</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.2.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
